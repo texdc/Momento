@@ -1,0 +1,29 @@
+{
+    "name": "texdc/momento",
+    "description": "A common set of domain event tools",
+    "type": "library",
+    "keywords": ["ddd", "domain event"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "George D. Cooksey, III",
+            "email": "texdc3@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "~5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.8",
+        "phpmd/phpmd": "~1.4",
+        "squizlabs/php_codesniffer": "~1.4",
+        "satooshi/php-coveralls": "~0.6"
+    },
+    "autoload": {
+	"psr-0": {
+	    "Momento\\": "src/"
+	}
+    }
+}
