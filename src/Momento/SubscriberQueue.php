@@ -50,8 +50,9 @@ class SubscriberQueue implements Countable, IteratorAggregate
     /**
      * Prevents duplicates and enforces an expected FIFO queue order
      *
-     * @param DomainEventSubscriber $subscriber the subscriber to insert
-     * @param int                   $priority   the subscriber's priority
+     * @param  DomainEventSubscriber $subscriber the subscriber to insert
+     * @param  int                   $priority   the subscriber's priority
+     * @throws InvalidArgumentException - on duplicate subscriber
      */
     public function insert(DomainEventSubscriber $subscriber, $priority)
     {

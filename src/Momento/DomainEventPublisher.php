@@ -9,7 +9,7 @@
 namespace Momento;
 
 /**
- * Registers {@link DomainEventSubscriber}s and publishes {@link DomainEvent}s
+ * Registers {@link DomainEventSubscriber} and publishes {@link DomainEvent}
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
@@ -25,12 +25,19 @@ class DomainEventPublisher
     /**
      * Constructor
      *
-     * @param DomainEventSubscriber[] $subscribers the subscribers to register
+     * If $subscribers is multi-dimensional, the inner array(s) must have two keys,
+     * subscriber and priority.
+     *
+     * @param array $subscribers the subscribers to register
      */
     public function __construct(array $subscribers = [])
     {
         foreach ($subscribers as $subscriber) {
-            $this->register($subscriber);
+            if (is_array($subscriber)) {
+                $this->register($subscriber['subscriber'], $subscriber['priority']);
+            } else {
+                $this->register($subscriber);
+            }
         }
     }
 
@@ -43,11 +50,8 @@ class DomainEventPublisher
      */
     public function publish(DomainEvent $event)
     {
-        $eventType = $event->eventType();
-        foreach ($this->subscribers as $subscriber) {
-            if ($subscriber->handlesEventType($eventType)) {
-                $subscriber->handle($event);
-            }
+        foreach ($this->subscribers[$event->eventType()] as $subscriber) {
+            $subscriber->handle($event);
         }
     }
 
@@ -58,9 +62,14 @@ class DomainEventPublisher
      *
      * @return void
      */
-    public function register(DomainEventSubscriber $subscriber)
+    public function register(DomainEventSubscriber $subscriber, $priority = 0)
     {
-        $this->subscribers[spl_object_hash($subscriber)] = $subscriber;
+        foreach ($subscriber->listHandledEventTypes() as $eventType) {
+            if (!isset($this->subscribers[$eventType])) {
+                $this->subscribers[$eventType] = new SubscriberQueue;
+            }
+            $this->subscribers[$eventType]->insert($subscriber, $priority);
+        }
     }
 
     /**
@@ -72,7 +81,11 @@ class DomainEventPublisher
      */
     public function unregister(DomainEventSubscriber $subscriber)
     {
-        unset($this->subscribers[spl_object_hash($subscriber)]);
+        foreach ($subscriber->listHandledEventTypes() as $eventType) {
+            if (isset($this->subscribers[$eventType])) {
+                $this->subscribers[$eventType]->remove($subscriber);
+            }
+        }
     }
 
     /**
@@ -80,8 +93,11 @@ class DomainEventPublisher
      *
      * @return DomainEventSubscriber[]
      */
-    public function subscribers()
+    public function subscribers($forEventType = null)
     {
+        if (isset($forEventType) && isset($this->subscribers[$forEventType])) {
+            return $this->subscribers[$forEventType]->toArray();
+        }
         return $this->subscribers;
     }
 }

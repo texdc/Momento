@@ -21,7 +21,7 @@ interface DomainEvent
     /**
      * Get the event's occurance date
      *
-     * @return DateTime
+     * @return DateTime|int
      */
     public function occurredOn();
 

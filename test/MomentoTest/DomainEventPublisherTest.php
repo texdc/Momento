@@ -30,7 +30,19 @@ class DomainEventPublisherTest extends TestCase
         $subscriber = $this->buildSubscriber();
         $subject = new DomainEventPublisher;
         $subject->register($subscriber);
-        $this->assertContains($subscriber, $subject->subscribers());
+        $this->assertContains($subscriber, $subject->subscribers('test'));
+    }
+
+    public function testConstructorWithSubscriberArray()
+    {
+        $subscriber1 = $this->buildSubscriber(['foo']);
+        $subscriber2 = $this->buildSubscriber();
+        $subject     = new DomainEventPublisher([
+            ['subscriber' => $subscriber1, 'priority' => 1],
+            ['subscriber' => $subscriber2, 'priority' => 5],
+        ]);
+        $this->assertArrayHasKey('foo', $subject->subscribers());
+        $this->assertArrayHasKey('test', $subject->subscribers());
     }
 
     public function testUnregisterRemovesSubscriber()
@@ -39,15 +51,7 @@ class DomainEventPublisherTest extends TestCase
         $subject = new DomainEventPublisher;
         $subject->register($subscriber);
         $subject->unregister($subscriber);
-        $this->assertNotContains($subscriber, $subject->subscribers());
-    }
-
-    public function testUnregisterIgnoresUnregisteredSubscriber()
-    {
-        $subscriber = $this->buildSubscriber();
-        $subject = new DomainEventPublisher;
-        $subject->unregister($subscriber);
-        $this->assertNotContains($subscriber, $subject->subscribers());
+        $this->assertNotContains($subscriber, $subject->subscribers('test'));
     }
 
     public function testPublishDispatchesEventToItsSubscribers()
@@ -58,22 +62,12 @@ class DomainEventPublisherTest extends TestCase
             ->method('eventType')
             ->will($this->returnValue('test'));
 
-        $subscriber1 = $this->buildSubscriber();
-        $subscriber1
-            ->expects($this->once())
-            ->method('handlesEventType')
-            ->with('test')
-            ->will($this->returnValue(false));
+        $subscriber1 = $this->buildSubscriber(['foo']);
         $subscriber1
             ->expects($this->never())
             ->method('handle');
 
         $subscriber2 = $this->buildSubscriber();
-        $subscriber2
-            ->expects($this->once())
-            ->method('handlesEventType')
-            ->with('test')
-            ->will($this->returnValue(true));
         $subscriber2
             ->expects($this->once())
             ->method('handle')
