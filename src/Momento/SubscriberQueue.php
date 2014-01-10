@@ -8,16 +8,88 @@
 
 namespace Momento;
 
+use Countable;
 use InvalidArgumentException;
+use IteratorAggregate;
 use SplPriorityQueue;
 
 /**
- * A prioritized queue for {@link DomainEventSubscriber} instances
+ * A reusable, prioritized queue for {@link DomainEventSubscriber} instances
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
-class SubscriberQueue extends SplPriorityQueue
+class SubscriberQueue implements Countable, IteratorAggregate
 {
+    /**
+     * The queued subscribers
+     * @var array
+     */
+    private $subscribers = [];
+
+    /**
+     * The internal queue
+     * @var SplPriorityQueue
+     */
+    private $queue;
+
+    /**
+     * The internal queue ordering regulator
+     * @var int
+     */
+    private $queueOrder = PHP_INT_MAX;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reset();
+    }
+
+    /**
+     * Prevents duplicates and enforces an expected FIFO queue order
+     *
+     * @param DomainEventSubscriber $subscriber the subscriber to insert
+     * @param int                   $priority   the subscriber's priority
+     */
+    public function insert(DomainEventSubscriber $subscriber, $priority)
+    {
+        if ($this->contains($subscriber)) {
+            throw new InvalidArgumentException('Duplicate subscriber');
+        }
+        $priority = [(int) $priority, $this->queueOrder--];
+        $this->subscribers[] = compact('subscriber', 'priority');
+        $this->queue->insert($subscriber, $priority);
+    }
+
+    /**
+     * Remove a subscriber and reset the queue
+     *
+     * @param DomainEventSubscriber $subscriber the subscriber to remove
+     */
+    public function remove(DomainEventSubscriber $subscriber)
+    {
+        foreach ($this->subscribers as $key => $item) {
+            if ($item['subscriber'] == $subscriber) {
+                unset($this->subscribers[$key]);
+                $this->reset();
+                break;
+            }
+        }
+    }
+
+    /**
+     * Is a subscriber contained?
+     *
+     * @param  DomainEventSubscriber $subscriber the subscriber to check
+     * @return bool
+     */
+    public function contains(DomainEventSubscriber $subscriber)
+    {
+        return (in_array($subscriber, $this->toArray(), true));
+    }
+
     /**
      * Get the queue as an array
      *
@@ -25,39 +97,51 @@ class SubscriberQueue extends SplPriorityQueue
      */
     public function toArray()
     {
-        $contents = [];
-        foreach ($this as $contained) {
-            $contents[] = $contained;
+        $subscribers = [];
+        foreach ($this->getIterator() as $item) {
+            $subscribers[] = $item;
         }
-        return $contents;
+        return $subscribers;
     }
 
     /**
-     * Allows only {@link DomainEventSubscriber} instances to be inserted
+     * Count the subscribers
      *
-     * @see SplPriorityQueue::insert()
+     * @return int
      */
-    public function insert($value, $priority)
+    public function count()
     {
-        $this->guardValueIsSubscriber($value);
-        parent::insert($value, $priority);
+        return count($this->subscribers);
     }
 
     /**
-     * Ensures the $value is a {@link DomainEventSubscriber}
+     * Get the internal queue
      *
-     * @param  mixed $value
-     * @throws InvalidArgumentException
+     * @return SplPriorityQueue
      */
-    private function guardValueIsSubscriber($value)
+    public function getIterator()
     {
-        if (!is_a($value, 'Momento\DomainEventSubscriber')) {
-            $message = sprintf(
-                'Inserted elements must be an instance of %s, [%s] provided',
-                'Momento\DomainEventSubscriber',
-                is_object($value) ? get_class($value) : gettype($value)
-            );
-            throw new InvalidArgumentException($message);
+        return clone $this->queue;
+    }
+
+    /**
+     * Get the first subscriber in the queue
+     *
+     * @return DomainEventSubscriber
+     */
+    public function top()
+    {
+        return $this->getIterator()->top();
+    }
+
+    /**
+     * Reset the queue
+     */
+    public function reset()
+    {
+        $this->queue = new SplPriorityQueue;
+        foreach ($this->subscribers as $item) {
+            $this->queue->insert($item['subscriber'], $item['priority']);
         }
     }
 }
