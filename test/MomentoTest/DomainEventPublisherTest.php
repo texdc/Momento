@@ -27,7 +27,7 @@ class DomainEventPublisherTest extends TestCase
 
     public function testRegisterRegistersSubscriber()
     {
-        $subscriber = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
+        $subscriber = $this->buildSubscriber();
         $subject = new DomainEventPublisher;
         $subject->register($subscriber);
         $this->assertContains($subscriber, $subject->subscribers());
@@ -35,7 +35,7 @@ class DomainEventPublisherTest extends TestCase
 
     public function testUnregisterRemovesSubscriber()
     {
-        $subscriber = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
+        $subscriber = $this->buildSubscriber();
         $subject = new DomainEventPublisher;
         $subject->register($subscriber);
         $subject->unregister($subscriber);
@@ -44,7 +44,7 @@ class DomainEventPublisherTest extends TestCase
 
     public function testUnregisterIgnoresUnregisteredSubscriber()
     {
-        $subscriber = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
+        $subscriber = $this->buildSubscriber();
         $subject = new DomainEventPublisher;
         $subject->unregister($subscriber);
         $this->assertNotContains($subscriber, $subject->subscribers());
@@ -52,22 +52,28 @@ class DomainEventPublisherTest extends TestCase
 
     public function testPublishDispatchesEventToItsSubscribers()
     {
-        $subscriber1 = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
+        $event = $this->getMockForAbstractClass('Momento\DomainEvent');
+        $event
+            ->expects($this->once())
+            ->method('eventType')
+            ->will($this->returnValue('test'));
+
+        $subscriber1 = $this->buildSubscriber();
         $subscriber1
             ->expects($this->once())
-            ->method('subscribedEventType')
-            ->will($this->returnValue('foo'));
+            ->method('handlesEventType')
+            ->with('test')
+            ->will($this->returnValue(false));
         $subscriber1
             ->expects($this->never())
             ->method('handle');
 
-        $event = $this->getMockForAbstractClass('Momento\DomainEvent');
-
-        $subscriber2 = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
+        $subscriber2 = $this->buildSubscriber();
         $subscriber2
             ->expects($this->once())
-            ->method('subscribedEventType')
-            ->will($this->returnValue(get_class($event)));
+            ->method('handlesEventType')
+            ->with('test')
+            ->will($this->returnValue(true));
         $subscriber2
             ->expects($this->once())
             ->method('handle')
@@ -77,10 +83,13 @@ class DomainEventPublisherTest extends TestCase
         $subject->publish($event);
     }
 
-    public function testEqualsComparesSubscribers()
+    private function buildSubscriber(array $handledEventTypes = ['test'])
     {
         $subscriber = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
-        $subject = new DomainEventPublisher([$subscriber]);
-        $this->assertFalse($subject->equals(new DomainEventPublisher));
+        $subscriber
+            ->expects($this->any())
+            ->method('listHandledEventTypes')
+            ->will($this->returnValue($handledEventTypes));
+        return $subscriber;
     }
 }

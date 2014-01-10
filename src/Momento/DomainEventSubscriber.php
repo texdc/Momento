@@ -23,9 +23,18 @@ interface DomainEventSubscriber
     public function handle(DomainEvent $event);
 
     /**
-     * Get the subscribed event type
+     * Is an event type handled?
      *
-     * @return string classname of the subscribed event type
+     * @param string $eventType the event type to check
+     *
+     * @return bool
      */
-    public function subscribedEventType();
+    public function handlesEventType($eventType);
+
+    /**
+     * List the handled event types
+     *
+     * @return array
+     */
+    public function listHandledEventTypes();
 }

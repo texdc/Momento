@@ -8,6 +8,8 @@
 
 namespace Momento;
 
+use DateTime;
+
 /**
  * Captures the memory of something interesting which affects the domain
  *
@@ -19,9 +21,16 @@ interface DomainEvent
     /**
      * Get the event's occurance date
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function occurredOn();
+
+    /**
+     * Get the event's type
+     *
+     * @return string
+     */
+    public function eventType();
 
     /**
      * Convert to a string

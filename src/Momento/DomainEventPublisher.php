@@ -43,9 +43,9 @@ class DomainEventPublisher
      */
     public function publish(DomainEvent $event)
     {
-        $eventType = get_class($event);
+        $eventType = $event->eventType();
         foreach ($this->subscribers as $subscriber) {
-            if ($subscriber->subscribedEventType() == $eventType) {
+            if ($subscriber->handlesEventType($eventType)) {
                 $subscriber->handle($event);
             }
         }
@@ -60,9 +60,7 @@ class DomainEventPublisher
      */
     public function register(DomainEventSubscriber $subscriber)
     {
-        if (!in_array($subscriber, $this->subscribers)) {
-            $this->subscribers[] = $subscriber;
-        }
+        $this->subscribers[spl_object_hash($subscriber)] = $subscriber;
     }
 
     /**
@@ -74,15 +72,7 @@ class DomainEventPublisher
      */
     public function unregister(DomainEventSubscriber $subscriber)
     {
-        if (!in_array($subscriber, $this->subscribers)) {
-            return;
-        }
-        foreach ($this->subscribers as $index => $registered) {
-            if ($registered == $subscriber) {
-                unset($this->subscribers[$index]);
-                break;
-            }
-        }
+        unset($this->subscribers[spl_object_hash($subscriber)]);
     }
 
     /**
@@ -93,17 +83,5 @@ class DomainEventPublisher
     public function subscribers()
     {
         return $this->subscribers;
-    }
-
-    /**
-     * Compare another domain event publisher for equality
-     *
-     * @param self $other the other publisher
-     *
-     * @return bool
-     */
-    public function equals(self $other)
-    {
-        return ($this->subscribers == $other->subscribers);
     }
 }
