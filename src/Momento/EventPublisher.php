@@ -9,7 +9,7 @@
 namespace Momento;
 
 /**
- * Registers {@link DomainEventSubscriber} and publishes {@link Event}
+ * Registers {@link EventHandler} and publishes {@link Event}
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
@@ -17,26 +17,26 @@ class EventPublisher
 {
 
     /**
-     * @var DomainEventSubscriber[]
+     * @var EventHandler[]
      */
-    protected $subscribers = [];
+    protected $handlers = [];
 
 
     /**
      * Constructor
      *
-     * If $subscribers is multi-dimensional, the inner array(s) must have two keys,
-     * subscriber and priority.
+     * If $handlers is multi-dimensional, the inner array(s) must have two keys,
+     * handler and priority.
      *
-     * @param array $subscribers the subscribers to register
+     * @param array $handlers the handlers to register
      */
-    public function __construct(array $subscribers = [])
+    public function __construct(array $handlers = [])
     {
-        foreach ($subscribers as $subscriber) {
-            if (is_array($subscriber)) {
-                $this->register($subscriber['subscriber'], $subscriber['priority']);
+        foreach ($handlers as $handler) {
+            if (is_array($handler)) {
+                $this->register($handler['handler'], $handler['priority']);
             } else {
-                $this->register($subscriber);
+                $this->register($handler);
             }
         }
     }
@@ -50,54 +50,54 @@ class EventPublisher
      */
     public function publish(Event $event)
     {
-        foreach ($this->subscribers[$event->eventType()] as $subscriber) {
-            $subscriber->handle($event);
+        foreach ($this->handlers[$event->eventType()] as $handler) {
+            $handler->handle($event);
         }
     }
 
     /**
-     * Register a subscriber
+     * Register a handler
      *
-     * @param DomainEventSubscriber $subscriber the subscriber to register
+     * @param EventHandler $handler the handler to register
      *
      * @return void
      */
-    public function register(DomainEventSubscriber $subscriber, $priority = 0)
+    public function register(EventHandler $handler, $priority = 0)
     {
-        foreach ($subscriber->listHandledEventTypes() as $eventType) {
-            if (!isset($this->subscribers[$eventType])) {
-                $this->subscribers[$eventType] = new SubscriberQueue;
+        foreach ($handler->listHandledEventTypes() as $eventType) {
+            if (!isset($this->handlers[$eventType])) {
+                $this->handlers[$eventType] = new SubscriberQueue;
             }
-            $this->subscribers[$eventType]->insert($subscriber, $priority);
+            $this->handlers[$eventType]->insert($handler, $priority);
         }
     }
 
     /**
-     * Unregister a subscriber
+     * Unregister a handler
      *
-     * @param DomainEventSubscriber $subscriber the subscriber to unregister
+     * @param EventHandler $handler the handler to unregister
      *
      * @return void
      */
-    public function unregister(DomainEventSubscriber $subscriber)
+    public function unregister(EventHandler $handler)
     {
-        foreach ($subscriber->listHandledEventTypes() as $eventType) {
-            if (isset($this->subscribers[$eventType])) {
-                $this->subscribers[$eventType]->remove($subscriber);
+        foreach ($handler->listHandledEventTypes() as $eventType) {
+            if (isset($this->handlers[$eventType])) {
+                $this->handlers[$eventType]->remove($handler);
             }
         }
     }
 
     /**
-     * Get the subscribers
+     * Get the handlers
      *
-     * @return DomainEventSubscriber[]
+     * @return EventHandler[]
      */
-    public function subscribers($forEventType = null)
+    public function handlers($forEventType = null)
     {
-        if (isset($forEventType) && isset($this->subscribers[$forEventType])) {
-            return $this->subscribers[$forEventType]->toArray();
+        if (isset($forEventType) && isset($this->handlers[$forEventType])) {
+            return $this->handlers[$forEventType]->toArray();
         }
-        return $this->subscribers;
+        return $this->handlers;
     }
 }

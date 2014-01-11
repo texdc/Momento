@@ -37,36 +37,36 @@ class SubscriberQueueTest extends TestCase
     public function testInsertRejectsDuplicates()
     {
         $subject = new SubscriberQueue;
-        $subscriber = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
-        $subject->insert($subscriber, 1);
-        $this->setExpectedException('InvalidArgumentException', 'Duplicate subscriber');
-        $subject->insert($subscriber, 2);
+        $handler = $this->getMockForAbstractClass('Momento\EventHandler');
+        $subject->insert($handler, 1);
+        $this->setExpectedException('InvalidArgumentException', 'Duplicate handler');
+        $subject->insert($handler, 2);
     }
 
     public function testToArrayContainsInsertedSubscribers()
     {
-        $subscriber = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
+        $handler = $this->getMockForAbstractClass('Momento\EventHandler');
         $subject = new SubscriberQueue;
-        $subject->insert($subscriber, 1);
-        $this->assertContains($subscriber, $subject->toArray());
+        $subject->insert($handler, 1);
+        $this->assertContains($handler, $subject->toArray());
     }
 
     public function testRemoveResetsQueue()
     {
-        $subject = new SubscriberQueue;
-        $subscriber1 = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
-        $subject->insert($subscriber1, 1);
-        $subscriber2 = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
-        $subject->insert($subscriber2, 1);
-        $subject->remove($subscriber1);
+        $subject  = new SubscriberQueue;
+        $handler1 = $this->getMockForAbstractClass('Momento\EventHandler');
+        $subject->insert($handler1, 1);
+        $handler2 = $this->getMockForAbstractClass('Momento\EventHandler');
+        $subject->insert($handler2, 1);
+        $subject->remove($handler1);
         $this->assertEquals(1, $subject->count());
     }
 
     public function testTop()
     {
         $subject = new SubscriberQueue;
-        $subscriber = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
-        $subject->insert($subscriber, 1);
-        $this->assertSame($subscriber, $subject->top());
+        $handler = $this->getMockForAbstractClass('Momento\EventHandler');
+        $subject->insert($handler, 1);
+        $this->assertSame($handler, $subject->top());
     }
 }

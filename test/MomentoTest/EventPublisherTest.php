@@ -19,42 +19,42 @@ class EventPublisherTest extends TestCase
         $this->assertTrue(class_exists('Momento\EventPublisher'));
     }
 
-    public function testSubscribersIsArray()
+    public function testHandlersIsArray()
     {
         $subject = new EventPublisher;
-        $this->assertInternalType('array', $subject->subscribers());
+        $this->assertInternalType('array', $subject->handlers());
     }
 
-    public function testRegisterRegistersSubscriber()
+    public function testRegisterRegistersHandler()
     {
-        $subscriber = $this->buildSubscriber();
+        $handler = $this->buildHandler();
         $subject = new EventPublisher;
-        $subject->register($subscriber);
-        $this->assertContains($subscriber, $subject->subscribers('test'));
+        $subject->register($handler);
+        $this->assertContains($handler, $subject->handlers('test'));
     }
 
-    public function testConstructorWithSubscriberArray()
+    public function testConstructorWithHandlerArray()
     {
-        $subscriber1 = $this->buildSubscriber(['foo']);
-        $subscriber2 = $this->buildSubscriber();
-        $subject     = new EventPublisher([
-            ['subscriber' => $subscriber1, 'priority' => 1],
-            ['subscriber' => $subscriber2, 'priority' => 5],
+        $handler1 = $this->buildHandler(['foo']);
+        $handler2 = $this->buildHandler();
+        $subject  = new EventPublisher([
+            ['handler' => $handler1, 'priority' => 1],
+            ['handler' => $handler2, 'priority' => 5],
         ]);
-        $this->assertArrayHasKey('foo', $subject->subscribers());
-        $this->assertArrayHasKey('test', $subject->subscribers());
+        $this->assertArrayHasKey('foo', $subject->handlers());
+        $this->assertArrayHasKey('test', $subject->handlers());
     }
 
-    public function testUnregisterRemovesSubscriber()
+    public function testUnregisterRemovesHandler()
     {
-        $subscriber = $this->buildSubscriber();
+        $handler = $this->buildHandler();
         $subject = new EventPublisher;
-        $subject->register($subscriber);
-        $subject->unregister($subscriber);
-        $this->assertNotContains($subscriber, $subject->subscribers('test'));
+        $subject->register($handler);
+        $subject->unregister($handler);
+        $this->assertNotContains($handler, $subject->handlers('test'));
     }
 
-    public function testPublishDispatchesEventToItsSubscribers()
+    public function testPublishDispatchesEventToItsHandlers()
     {
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
@@ -62,28 +62,28 @@ class EventPublisherTest extends TestCase
             ->method('eventType')
             ->will($this->returnValue('test'));
 
-        $subscriber1 = $this->buildSubscriber(['foo']);
-        $subscriber1
+        $handler1 = $this->buildHandler(['foo']);
+        $handler1
             ->expects($this->never())
             ->method('handle');
 
-        $subscriber2 = $this->buildSubscriber();
-        $subscriber2
+        $handler2 = $this->buildHandler();
+        $handler2
             ->expects($this->once())
             ->method('handle')
             ->with($event);
 
-        $subject = new EventPublisher([$subscriber1, $subscriber2]);
+        $subject = new EventPublisher([$handler1, $handler2]);
         $subject->publish($event);
     }
 
-    private function buildSubscriber(array $handledEventTypes = ['test'])
+    private function buildHandler(array $handledEventTypes = ['test'])
     {
-        $subscriber = $this->getMockForAbstractClass('Momento\DomainEventSubscriber');
-        $subscriber
+        $handler = $this->getMockForAbstractClass('Momento\EventHandler');
+        $handler
             ->expects($this->any())
             ->method('listHandledEventTypes')
             ->will($this->returnValue($handledEventTypes));
-        return $subscriber;
+        return $handler;
     }
 }

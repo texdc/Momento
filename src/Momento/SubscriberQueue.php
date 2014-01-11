@@ -14,17 +14,17 @@ use IteratorAggregate;
 use SplPriorityQueue;
 
 /**
- * A reusable, prioritized queue for {@link DomainEventSubscriber} instances
+ * A reusable, prioritized queue for {@link EventHandler} instances
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 class SubscriberQueue implements Countable, IteratorAggregate
 {
     /**
-     * The queued subscribers
+     * The queued handlers
      * @var array
      */
-    private $subscribers = [];
+    private $handlers = [];
 
     /**
      * The internal queue
@@ -50,30 +50,30 @@ class SubscriberQueue implements Countable, IteratorAggregate
     /**
      * Prevents duplicates and enforces an expected FIFO queue order
      *
-     * @param  DomainEventSubscriber $subscriber the subscriber to insert
-     * @param  int                   $priority   the subscriber's priority
-     * @throws InvalidArgumentException - on duplicate subscriber
+     * @param  EventHandler $handler the handler to insert
+     * @param  int                   $priority   the handler's priority
+     * @throws InvalidArgumentException - on duplicate handler
      */
-    public function insert(DomainEventSubscriber $subscriber, $priority)
+    public function insert(EventHandler $handler, $priority)
     {
-        if ($this->contains($subscriber)) {
-            throw new InvalidArgumentException('Duplicate subscriber');
+        if ($this->contains($handler)) {
+            throw new InvalidArgumentException('Duplicate handler');
         }
         $priority = [(int) $priority, $this->queueOrder--];
-        $this->subscribers[] = compact('subscriber', 'priority');
-        $this->queue->insert($subscriber, $priority);
+        $this->handlers[] = compact('handler', 'priority');
+        $this->queue->insert($handler, $priority);
     }
 
     /**
-     * Remove a subscriber and reset the queue
+     * Remove a handler and reset the queue
      *
-     * @param DomainEventSubscriber $subscriber the subscriber to remove
+     * @param EventHandler $handler the handler to remove
      */
-    public function remove(DomainEventSubscriber $subscriber)
+    public function remove(EventHandler $handler)
     {
-        foreach ($this->subscribers as $key => $item) {
-            if ($item['subscriber'] == $subscriber) {
-                unset($this->subscribers[$key]);
+        foreach ($this->handlers as $key => $item) {
+            if ($item['handler'] == $handler) {
+                unset($this->handlers[$key]);
                 $this->reset();
                 break;
             }
@@ -81,14 +81,14 @@ class SubscriberQueue implements Countable, IteratorAggregate
     }
 
     /**
-     * Is a subscriber contained?
+     * Is a handler contained?
      *
-     * @param  DomainEventSubscriber $subscriber the subscriber to check
+     * @param  EventHandler $handler the handler to check
      * @return bool
      */
-    public function contains(DomainEventSubscriber $subscriber)
+    public function contains(EventHandler $handler)
     {
-        return (in_array($subscriber, $this->toArray(), true));
+        return (in_array($handler, $this->toArray(), true));
     }
 
     /**
@@ -98,21 +98,21 @@ class SubscriberQueue implements Countable, IteratorAggregate
      */
     public function toArray()
     {
-        $subscribers = [];
+        $handlers = [];
         foreach ($this->getIterator() as $item) {
-            $subscribers[] = $item;
+            $handlers[] = $item;
         }
-        return $subscribers;
+        return $handlers;
     }
 
     /**
-     * Count the subscribers
+     * Count the handlers
      *
      * @return int
      */
     public function count()
     {
-        return count($this->subscribers);
+        return count($this->handlers);
     }
 
     /**
@@ -126,9 +126,9 @@ class SubscriberQueue implements Countable, IteratorAggregate
     }
 
     /**
-     * Get the first subscriber in the queue
+     * Get the first handler in the queue
      *
-     * @return DomainEventSubscriber
+     * @return EventHandler
      */
     public function top()
     {
@@ -141,8 +141,8 @@ class SubscriberQueue implements Countable, IteratorAggregate
     public function reset()
     {
         $this->queue = new SplPriorityQueue;
-        foreach ($this->subscribers as $item) {
-            $this->queue->insert($item['subscriber'], $item['priority']);
+        foreach ($this->handlers as $item) {
+            $this->queue->insert($item['handler'], $item['priority']);
         }
     }
 }
