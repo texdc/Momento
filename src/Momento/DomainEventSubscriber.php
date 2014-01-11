@@ -9,18 +9,18 @@
 namespace Momento;
 
 /**
- * A {@link DomainEvent} observer
+ * An {@link Event} observer
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 interface DomainEventSubscriber
 {
     /**
-     * Handle a {@link DomainEvent}
+     * Handle a {@link Event}
      *
-     * @param DomainEvent $event the event to handle
+     * @param Event $event the event to handle
      */
-    public function handle(DomainEvent $event);
+    public function handle(Event $event);
 
     /**
      * List the handled event types

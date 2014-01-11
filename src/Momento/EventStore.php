@@ -11,7 +11,7 @@ namespace Momento;
 use Countable;
 
 /**
- * Stores {@link DomainEvent}s as {@link StoredEvent}s
+ * Stores {@link Event}s as {@link StoredEvent}s
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
@@ -37,13 +37,13 @@ interface EventStore extends Countable
     public function allStoredEventsSince($storedEventId);
 
     /**
-     * Append a {@link DomainEvent}
+     * Append a {@link Event}
      *
-     * @param DomainEvent $event the event to append
+     * @param Event $event the event to append
      *
      * @return StoredEvent
      */
-    public function append(DomainEvent $event);
+    public function append(Event $event);
 
     /**
      * Remove a stored event by id

@@ -21,7 +21,7 @@ class StoredEventTest extends TestCase
 
     public function testEventIdReturnsInt()
     {
-        $event = $this->getMockForAbstractClass('Momento\DomainEvent');
+        $event = $this->getMockForAbstractClass('Momento\Event');
         $subject = new StoredEvent($event);
         $this->assertInternalType('int', $subject->eventId());
     }
@@ -29,7 +29,7 @@ class StoredEventTest extends TestCase
     public function testOccurredOnReturnsEventsOccurredOnDate()
     {
         $expectedDate = new DateTime;
-        $event = $this->getMockForAbstractClass('Momento\DomainEvent');
+        $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
             ->method('occurredOn')
@@ -41,22 +41,22 @@ class StoredEventTest extends TestCase
 
     public function testToDomainEventReturnsContainedEvent()
     {
-        $event = $this->getMockForAbstractClass('Momento\DomainEvent');
+        $event = $this->getMockForAbstractClass('Momento\Event');
         $subject = new StoredEvent($event);
-        $this->assertSame($event, $subject->toDomainEvent());
+        $this->assertSame($event, $subject->toEvent());
     }
 
     public function testTypeNameReturnsContainedEventClassname()
     {
-        $event = $this->getMockForAbstractClass('Momento\DomainEvent');
+        $event = $this->getMockForAbstractClass('Momento\Event');
         $subject = new StoredEvent($event);
         $this->assertEquals(get_class($event), $subject->typeName());
     }
 
     public function testEqualsComparesEventId()
     {
-        $event1 = $this->getMockForAbstractClass('Momento\DomainEvent');
-        $event2 = $this->getMockForAbstractClass('Momento\DomainEvent');
+        $event1 = $this->getMockForAbstractClass('Momento\Event');
+        $event2 = $this->getMockForAbstractClass('Momento\Event');
         $subject = new StoredEvent($event1);
         $other = new StoredEvent($event2);
         $this->assertTrue($subject->equals($other));
@@ -64,7 +64,7 @@ class StoredEventTest extends TestCase
 
     public function testToStringReturnsFormattedString()
     {
-        $event = $this->getMockForAbstractClass('Momento\DomainEvent');
+        $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
             ->method('__toString')

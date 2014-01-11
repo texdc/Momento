@@ -56,7 +56,7 @@ class DomainEventPublisherTest extends TestCase
 
     public function testPublishDispatchesEventToItsSubscribers()
     {
-        $event = $this->getMockForAbstractClass('Momento\DomainEvent');
+        $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
             ->method('eventType')

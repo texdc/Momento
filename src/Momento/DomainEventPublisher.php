@@ -9,7 +9,7 @@
 namespace Momento;
 
 /**
- * Registers {@link DomainEventSubscriber} and publishes {@link DomainEvent}
+ * Registers {@link DomainEventSubscriber} and publishes {@link Event}
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
@@ -44,11 +44,11 @@ class DomainEventPublisher
     /**
      * Publish an event
      *
-     * @param DomainEvent $event the event to publish
+     * @param Event $event the event to publish
      *
      * @return void
      */
-    public function publish(DomainEvent $event)
+    public function publish(Event $event)
     {
         foreach ($this->subscribers[$event->eventType()] as $subscriber) {
             $subscriber->handle($event);

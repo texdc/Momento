@@ -9,7 +9,7 @@
 namespace Momento;
 
 /**
- * Decorates a {@link DomainEvent} with a unique identifier
+ * Decorates a {@link Event} with a unique identifier
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
@@ -22,7 +22,7 @@ class StoredEvent
     protected $eventId;
 
     /**
-     * @var DomainEvent
+     * @var Event
      */
     private $event;
 
@@ -30,9 +30,9 @@ class StoredEvent
     /**
      * Constructor
      *
-     * @param DomainEvent $event the event to store
+     * @param Event $event the event to store
      */
-    public function __construct(DomainEvent $event)
+    public function __construct(Event $event)
     {
         $this->event = $event;
     }
@@ -60,9 +60,9 @@ class StoredEvent
     /**
      * Get the domain event
      *
-     * @return DomainEvent
+     * @return Event
      */
-    public function toDomainEvent()
+    public function toEvent()
     {
         return $this->event;
     }
