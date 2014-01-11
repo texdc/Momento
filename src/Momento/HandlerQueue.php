@@ -9,9 +9,10 @@
 namespace Momento;
 
 use Countable;
-use InvalidArgumentException;
 use IteratorAggregate;
 use SplPriorityQueue;
+
+use Momento\Exception\DuplicateHandlerException;
 
 /**
  * A reusable, prioritized queue for {@link EventHandler} instances
@@ -52,12 +53,12 @@ class HandlerQueue implements Countable, IteratorAggregate
      *
      * @param  EventHandler $handler the handler to insert
      * @param  int                   $priority   the handler's priority
-     * @throws InvalidArgumentException - on duplicate handler
+     * @throws DuplicateHandlerException - on duplicate handler
      */
     public function insert(EventHandler $handler, $priority)
     {
         if ($this->contains($handler)) {
-            throw new InvalidArgumentException('Duplicate handler');
+            throw new DuplicateHandlerException($handler);
         }
         $priority = [(int) $priority, $this->queueOrder--];
         $this->handlers[] = compact('handler', 'priority');
