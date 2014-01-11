@@ -9,10 +9,12 @@
 namespace Momento;
 
 use Countable;
-use RuntimeException;
+
+use Momento\Exception\AppendingPreventedException;
+use Momento\Exception\RemovalPreventedException;
 
 /**
- * Stores {@link Event}s as {@link StoredEvent}s
+ * Stores events as {@link StoredEvent} instances
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
@@ -41,7 +43,7 @@ interface EventStore extends Countable
      * Append an event
      *
      * @param  Event $event the event to append
-     * @throws RuntimeException - when the event cannot be appended
+     * @throws AppendingPreventedException - when the event cannot be appended
      * @return StoredEvent
      */
     public function append(Event $event);
@@ -50,7 +52,7 @@ interface EventStore extends Countable
      * Remove a stored event
      *
      * @param  StoredEvent $storedEvent the stored event to remove
-     * @throws RuntimeException - when the event cannot be removed
+     * @throws RemovalPreventedException - when the event cannot be removed
      * @return void
      */
     public function remove(StoredEvent $storedEvent);
