@@ -72,9 +72,9 @@ class StoredEvent
      *
      * @return string
      */
-    public function typeName()
+    public function eventType()
     {
-        return get_class($this->event);
+        return $this->event->eventType();
     }
 
     /**

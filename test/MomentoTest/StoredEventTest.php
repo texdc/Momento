@@ -46,11 +46,15 @@ class StoredEventTest extends TestCase
         $this->assertSame($event, $subject->toEvent());
     }
 
-    public function testTypeNameReturnsContainedEventClassname()
+    public function testEventTypeReturnsContainedEventType()
     {
         $event = $this->getMockForAbstractClass('Momento\Event');
+        $event
+            ->expects($this->once())
+            ->method('eventType')
+            ->will($this->returnValue('test'));
         $subject = new StoredEvent($event);
-        $this->assertEquals(get_class($event), $subject->typeName());
+        $this->assertEquals('test', $subject->eventType());
     }
 
     public function testEqualsComparesEventId()
