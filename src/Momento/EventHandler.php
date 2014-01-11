@@ -9,16 +9,18 @@
 namespace Momento;
 
 /**
- * An {@link Event} observer
+ * Handles events with either simple processing or delegating complex tasks to a
+ * proper service or model.
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 interface EventHandler
 {
     /**
-     * Handle a {@link Event}
+     * Handle an {@link Event}
      *
-     * @param Event $event the event to handle
+     * @param  Event $event the event to handle
+     * @return bool false to halt further processing, null or true to continue
      */
     public function handle(Event $event);
 

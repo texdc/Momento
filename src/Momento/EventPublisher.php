@@ -51,7 +51,9 @@ class EventPublisher
     public function publish(Event $event)
     {
         foreach ($this->handlers[$event->eventType()] as $handler) {
-            $handler->handle($event);
+            if (false == $handler->handle($event)) {
+                break; // processing has been halted
+            }
         }
     }
 

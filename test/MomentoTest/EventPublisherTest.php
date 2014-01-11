@@ -79,6 +79,30 @@ class EventPublisherTest extends TestCase
         $subject->publish($event);
     }
 
+    public function testStoppedEventPreventsPropagation()
+    {
+        $event = $this->getMockForAbstractClass('Momento\Event');
+        $event
+            ->expects($this->once())
+            ->method('eventType')
+            ->will($this->returnValue('test'));
+
+        $handler1 = $this->buildHandler();
+        $handler1
+            ->expects($this->once())
+            ->method('handle')
+            ->with($event)
+            ->will($this->returnValue(false));
+
+        $handler2 = $this->buildHandler();
+        $handler2
+            ->expects($this->never())
+            ->method('handle');
+
+        $subject = new EventPublisher([$handler1, $handler2]);
+        $subject->publish($event);
+    }
+
     private function buildHandler(array $handledEventTypes = ['test'])
     {
         $handler = $this->getMockForAbstractClass('Momento\EventHandler');
