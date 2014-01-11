@@ -1,6 +1,6 @@
 <?php
 /**
- * SubscriberQueueTest.php
+ * HandlerQueueTest.php
  *
  * @copyright 2014 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -9,51 +9,51 @@
 namespace MomentoTest;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use Momento\SubscriberQueue;
+use Momento\HandlerQueue;
 
-class SubscriberQueueTest extends TestCase
+class HandlerQueueTest extends TestCase
 {
     public function testClassExists()
     {
-        $this->assertTrue(class_exists('Momento\SubscriberQueue'));
+        $this->assertTrue(class_exists('Momento\HandlerQueue'));
     }
 
     public function testClassImplementsCountable()
     {
-        $this->assertInstanceOf('Countable', new SubscriberQueue);
+        $this->assertInstanceOf('Countable', new HandlerQueue);
     }
 
     public function testClassImplementsIteratorAggregate()
     {
-        $this->assertInstanceOf('IteratorAggregate', new SubscriberQueue);
+        $this->assertInstanceOf('IteratorAggregate', new HandlerQueue);
     }
 
     public function testToArrayReturnsArray()
     {
-        $subject = new SubscriberQueue;
+        $subject = new HandlerQueue;
         $this->assertInternalType('array', $subject->toArray());
     }
 
     public function testInsertRejectsDuplicates()
     {
-        $subject = new SubscriberQueue;
+        $subject = new HandlerQueue;
         $handler = $this->getMockForAbstractClass('Momento\EventHandler');
         $subject->insert($handler, 1);
         $this->setExpectedException('InvalidArgumentException', 'Duplicate handler');
         $subject->insert($handler, 2);
     }
 
-    public function testToArrayContainsInsertedSubscribers()
+    public function testToArrayContainsInsertedHandlers()
     {
         $handler = $this->getMockForAbstractClass('Momento\EventHandler');
-        $subject = new SubscriberQueue;
+        $subject = new HandlerQueue;
         $subject->insert($handler, 1);
         $this->assertContains($handler, $subject->toArray());
     }
 
     public function testRemoveResetsQueue()
     {
-        $subject  = new SubscriberQueue;
+        $subject  = new HandlerQueue;
         $handler1 = $this->getMockForAbstractClass('Momento\EventHandler');
         $subject->insert($handler1, 1);
         $handler2 = $this->getMockForAbstractClass('Momento\EventHandler');
@@ -64,7 +64,7 @@ class SubscriberQueueTest extends TestCase
 
     public function testTop()
     {
-        $subject = new SubscriberQueue;
+        $subject = new HandlerQueue;
         $handler = $this->getMockForAbstractClass('Momento\EventHandler');
         $subject->insert($handler, 1);
         $this->assertSame($handler, $subject->top());

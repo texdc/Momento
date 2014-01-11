@@ -1,6 +1,6 @@
 <?php
 /**
- * SubscriberQueue.php
+ * HandlerQueue.php
  *
  * @copyright 2014 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -18,7 +18,7 @@ use SplPriorityQueue;
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
-class SubscriberQueue implements Countable, IteratorAggregate
+class HandlerQueue implements Countable, IteratorAggregate
 {
     /**
      * The queued handlers

@@ -66,7 +66,7 @@ class EventPublisher
     {
         foreach ($handler->listHandledEventTypes() as $eventType) {
             if (!isset($this->handlers[$eventType])) {
-                $this->handlers[$eventType] = new SubscriberQueue;
+                $this->handlers[$eventType] = new HandlerQueue;
             }
             $this->handlers[$eventType]->insert($handler, $priority);
         }
