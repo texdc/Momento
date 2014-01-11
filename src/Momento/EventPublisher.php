@@ -8,6 +8,8 @@
 
 namespace Momento;
 
+use Momento\Exception\HandlingHaltedException;
+
 /**
  * Registers {@link EventHandler} and publishes {@link Event}
  *
@@ -44,15 +46,15 @@ class EventPublisher
     /**
      * Publish an event
      *
-     * @param Event $event the event to publish
-     *
+     * @param  Event $event the event to publish
+     * @throws HandlingHaltedException - when event handling has been halted
      * @return void
      */
     public function publish(Event $event)
     {
         foreach ($this->handlers[$event->eventType()] as $handler) {
             if (false == $handler->handle($event)) {
-                break; // processing has been halted
+                throw new HandlingHaltedException($event, $handler);
             }
         }
     }

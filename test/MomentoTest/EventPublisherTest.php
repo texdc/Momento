@@ -73,7 +73,8 @@ class EventPublisherTest extends TestCase
         $handler2
             ->expects($this->once())
             ->method('handle')
-            ->with($event);
+            ->with($event)
+            ->will($this->returnValue(true));
 
         $subject = new EventPublisher([$handler1, $handler2]);
         $subject->publish($event);
@@ -83,7 +84,7 @@ class EventPublisherTest extends TestCase
     {
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('eventType')
             ->will($this->returnValue('test'));
 
@@ -100,6 +101,10 @@ class EventPublisherTest extends TestCase
             ->method('handle');
 
         $subject = new EventPublisher([$handler1, $handler2]);
+        $this->setExpectedException(
+            'Momento\Exception\HandlingHaltedException',
+            sprintf('Handling halted for [test] by [%s]', get_class($handler1))
+        );
         $subject->publish($event);
     }
 
