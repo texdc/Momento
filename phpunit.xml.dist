@@ -10,10 +10,10 @@
     </testsuites>
 
     <logging>
-        <log type="coverage-html" target="./build/reports/html" title="PHPUnit"
+        <log type="coverage-html" target="./build/logs/html" title="PHPUnit"
             charset="UTF-8" yui="true" highlight="true" lowUpperBound="50"
             highLowerBound="80" />
-        <log type="coverage-clover" target="./build/reports/clover.xml" />
+        <log type="coverage-clover" target="./build/logs/clover.xml" />
         <log type="junit" target="./build/reports/junit.xml"
             logIncompleteSkipped="false" />
     </logging>
@@ -24,6 +24,7 @@
             <exclude>
                 <directory>./vendor</directory>
                 <directory>./test</directory>
+                <directory>./build</directory>
             </exclude>
         </whitelist>
     </filter>

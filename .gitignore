@@ -5,4 +5,4 @@
 composer.lock
 phpunit.xml
 vendor
-build/reports*
+build*
