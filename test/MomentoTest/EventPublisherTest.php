@@ -1,6 +1,6 @@
 <?php
 /**
- * DomainEventPublisherTest.php
+ * EventPublisherTest.php
  *
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright 2013 George D. Cooksey, III
@@ -9,26 +9,26 @@
 namespace MomentoTest;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use Momento\DomainEventPublisher;
+use Momento\EventPublisher;
 
-class DomainEventPublisherTest extends TestCase
+class EventPublisherTest extends TestCase
 {
 
     public function testClassExists()
     {
-        $this->assertTrue(class_exists('Momento\DomainEventPublisher'));
+        $this->assertTrue(class_exists('Momento\EventPublisher'));
     }
 
     public function testSubscribersIsArray()
     {
-        $subject = new DomainEventPublisher;
+        $subject = new EventPublisher;
         $this->assertInternalType('array', $subject->subscribers());
     }
 
     public function testRegisterRegistersSubscriber()
     {
         $subscriber = $this->buildSubscriber();
-        $subject = new DomainEventPublisher;
+        $subject = new EventPublisher;
         $subject->register($subscriber);
         $this->assertContains($subscriber, $subject->subscribers('test'));
     }
@@ -37,7 +37,7 @@ class DomainEventPublisherTest extends TestCase
     {
         $subscriber1 = $this->buildSubscriber(['foo']);
         $subscriber2 = $this->buildSubscriber();
-        $subject     = new DomainEventPublisher([
+        $subject     = new EventPublisher([
             ['subscriber' => $subscriber1, 'priority' => 1],
             ['subscriber' => $subscriber2, 'priority' => 5],
         ]);
@@ -48,7 +48,7 @@ class DomainEventPublisherTest extends TestCase
     public function testUnregisterRemovesSubscriber()
     {
         $subscriber = $this->buildSubscriber();
-        $subject = new DomainEventPublisher;
+        $subject = new EventPublisher;
         $subject->register($subscriber);
         $subject->unregister($subscriber);
         $this->assertNotContains($subscriber, $subject->subscribers('test'));
@@ -73,7 +73,7 @@ class DomainEventPublisherTest extends TestCase
             ->method('handle')
             ->with($event);
 
-        $subject = new DomainEventPublisher([$subscriber1, $subscriber2]);
+        $subject = new EventPublisher([$subscriber1, $subscriber2]);
         $subject->publish($event);
     }
 
