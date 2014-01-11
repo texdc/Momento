@@ -9,6 +9,7 @@
 namespace Momento;
 
 use Countable;
+use RuntimeException;
 
 /**
  * Stores {@link Event}s as {@link StoredEvent}s
@@ -37,20 +38,20 @@ interface EventStore extends Countable
     public function allStoredEventsSince($storedEventId);
 
     /**
-     * Append a {@link Event}
+     * Append an event
      *
-     * @param Event $event the event to append
-     *
+     * @param  Event $event the event to append
+     * @throws RuntimeException - when the event cannot be appended
      * @return StoredEvent
      */
     public function append(Event $event);
 
     /**
-     * Remove a stored event by id
+     * Remove a stored event
      *
-     * @param int $storedEventId the stored event id to remove
-     *
-     * @return StoredEvent the removed event
+     * @param  StoredEvent $storedEvent the stored event to remove
+     * @throws RuntimeException - when the event cannot be removed
+     * @return void
      */
-    public function remove($storedEventId);
+    public function remove(StoredEvent $storedEvent);
 }
