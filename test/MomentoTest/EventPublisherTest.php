@@ -19,10 +19,10 @@ class EventPublisherTest extends TestCase
         $this->assertTrue(class_exists('Momento\EventPublisher'));
     }
 
-    public function testHandlersIsArray()
+    public function testHandlersListIsArray()
     {
         $subject = new EventPublisher;
-        $this->assertInternalType('array', $subject->handlers());
+        $this->assertInternalType('array', $subject->listRegisteredHandlers());
     }
 
     public function testRegisterRegistersHandler()
@@ -30,7 +30,7 @@ class EventPublisherTest extends TestCase
         $handler = $this->buildHandler();
         $subject = new EventPublisher;
         $subject->register($handler);
-        $this->assertContains($handler, $subject->handlers('test'));
+        $this->assertContains($handler, $subject->listRegisteredHandlers('test'));
     }
 
     public function testConstructorWithHandlerArray()
@@ -41,8 +41,10 @@ class EventPublisherTest extends TestCase
             ['handler' => $handler1, 'priority' => 1],
             ['handler' => $handler2, 'priority' => 5],
         ]);
-        $this->assertArrayHasKey('foo', $subject->handlers());
-        $this->assertArrayHasKey('test', $subject->handlers());
+
+        $handlers = $subject->listRegisteredHandlers();
+        $this->assertArrayHasKey('foo', $handlers);
+        $this->assertArrayHasKey('test', $handlers);
     }
 
     public function testUnregisterRemovesHandler()
@@ -51,7 +53,7 @@ class EventPublisherTest extends TestCase
         $subject = new EventPublisher;
         $subject->register($handler);
         $subject->unregister($handler);
-        $this->assertNotContains($handler, $subject->handlers('test'));
+        $this->assertNotContains($handler, $subject->listRegisteredHandlers('test'));
     }
 
     public function testPublishDispatchesEventToItsHandlers()

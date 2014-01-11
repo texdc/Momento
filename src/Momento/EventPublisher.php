@@ -89,11 +89,11 @@ class EventPublisher
     }
 
     /**
-     * Get the handlers
+     * Get the registered handlers
      *
      * @return EventHandler[]
      */
-    public function handlers($forEventType = null)
+    public function listRegisteredHandlers($forEventType = null)
     {
         if (isset($forEventType) && isset($this->handlers[$forEventType])) {
             return $this->handlers[$forEventType]->toArray();
