@@ -8,8 +8,10 @@
 
 namespace MomentoTest;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Momento\EventPublisher;
+use MomentoTest\TestAsset\TestResult;
+
+use PHPUnit_Framework_TestCase as TestCase;
 
 class EventPublisherTest extends TestCase
 {
@@ -74,7 +76,7 @@ class EventPublisherTest extends TestCase
             ->expects($this->once())
             ->method('handle')
             ->with($event)
-            ->will($this->returnValue(true));
+            ->will($this->returnValue(new TestResult($event)));
 
         $subject = new EventPublisher([$handler1, $handler2]);
         $subject->publish($event);
@@ -84,7 +86,7 @@ class EventPublisherTest extends TestCase
     {
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
-            ->expects($this->exactly(2))
+            ->expects($this->once())
             ->method('eventType')
             ->will($this->returnValue('test'));
 
@@ -93,7 +95,7 @@ class EventPublisherTest extends TestCase
             ->expects($this->once())
             ->method('handle')
             ->with($event)
-            ->will($this->returnValue(false));
+            ->will($this->returnValue(new TestResult($event, true)));
 
         $handler2 = $this->buildHandler();
         $handler2
@@ -101,10 +103,6 @@ class EventPublisherTest extends TestCase
             ->method('handle');
 
         $subject = new EventPublisher([$handler1, $handler2]);
-        $this->setExpectedException(
-            'Momento\Exception\HandlingHaltedException',
-            sprintf('Handling halted for [test] by [%s]', get_class($handler1))
-        );
         $subject->publish($event);
     }
 

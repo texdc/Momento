@@ -20,7 +20,7 @@ interface EventHandler
      * Handle an {@link Event}
      *
      * @param  Event $event the event to handle
-     * @return bool false to halt further processing, true to continue
+     * @return EventResult
      */
     public function handle(Event $event);
 
