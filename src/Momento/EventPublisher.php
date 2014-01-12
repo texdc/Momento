@@ -35,11 +35,11 @@ class EventPublisher
     public function __construct(array $handlers = [])
     {
         foreach ($handlers as $handler) {
+            $priority = 0;
             if (is_array($handler)) {
-                $this->register($handler['handler'], $handler['priority']);
-            } else {
-                $this->register($handler);
+                extract($handler, EXTR_OVERWRITE);
             }
+            $this->register($handler, $priority);
         }
     }
 
