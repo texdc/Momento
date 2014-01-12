@@ -15,22 +15,37 @@ use PHPUnit_Framework_TestCase as TestCase;
 
 class EventPublisherTest extends TestCase
 {
+    private $validEventTypes = ['test', 'foo'];
 
     public function testClassExists()
     {
         $this->assertTrue(class_exists('Momento\EventPublisher'));
     }
 
-    public function testHandlersListIsArray()
+    public function testListValidEventTypesReturnsDefinedEventTypes()
     {
-        $subject = new EventPublisher;
+        $subject = new EventPublisher($this->validEventTypes);
+        $this->assertSame($this->validEventTypes, $subject->listValidEventTypes());
+    }
+
+    public function testListRegisteredHandlersReturnsArray()
+    {
+        $subject = new EventPublisher($this->validEventTypes);
         $this->assertInternalType('array', $subject->listRegisteredHandlers());
     }
 
     public function testRegisterRegistersHandler()
     {
         $handler = $this->buildHandler();
-        $subject = new EventPublisher;
+        $subject = new EventPublisher($this->validEventTypes);
+        $subject->register($handler);
+        $this->assertContains($handler, $subject->listRegisteredHandlers('test'));
+    }
+
+    public function testRegisterHandlerWithUnsupportedEventTypeIsRegistered()
+    {
+        $handler = $this->buildHandler(['error', 'test']);
+        $subject = new EventPublisher($this->validEventTypes);
         $subject->register($handler);
         $this->assertContains($handler, $subject->listRegisteredHandlers('test'));
     }
@@ -39,7 +54,7 @@ class EventPublisherTest extends TestCase
     {
         $handler1 = $this->buildHandler(['foo']);
         $handler2 = $this->buildHandler();
-        $subject  = new EventPublisher([
+        $subject  = new EventPublisher($this->validEventTypes, [
             ['handler' => $handler1, 'priority' => 1],
             ['handler' => $handler2, 'priority' => 5],
         ]);
@@ -52,10 +67,47 @@ class EventPublisherTest extends TestCase
     public function testUnregisterRemovesHandler()
     {
         $handler = $this->buildHandler();
-        $subject = new EventPublisher;
+        $subject = new EventPublisher($this->validEventTypes);
         $subject->register($handler);
         $subject->unregister($handler);
         $this->assertNotContains($handler, $subject->listRegisteredHandlers('test'));
+    }
+
+    public function testDisableGuardsForValidEventType()
+    {
+        $subject = new EventPublisher($this->validEventTypes);
+        $this->setExpectedException(
+            'Momento\Exception\InvalidEventTypeException',
+            'Invalid event type [error]'
+        );
+        $subject->disable('error');
+    }
+
+    public function testDisableEventType()
+    {
+        $subject = new EventPublisher($this->validEventTypes);
+        $subject->disable('foo');
+        $this->assertNotContains('foo', $subject->listEnabledEventTypes());
+        $this->assertContains('foo', $subject->listDisabledEventTypes());
+    }
+
+    public function testEnableGuardsForValidEventType()
+    {
+        $subject = new EventPublisher($this->validEventTypes);
+        $this->setExpectedException(
+            'Momento\Exception\InvalidEventTypeException',
+            'Invalid event type [error]'
+        );
+        $subject->enable('error');
+    }
+
+    public function testEnableEventType()
+    {
+        $subject = new EventPublisher($this->validEventTypes);
+        $subject->disable('foo');
+        $subject->enable('foo');
+        $this->assertContains('foo', $subject->listEnabledEventTypes());
+        $this->assertNotContains('foo', $subject->listDisabledEventTypes());
     }
 
     public function testPublishDispatchesEventToItsHandlers()
@@ -78,7 +130,7 @@ class EventPublisherTest extends TestCase
             ->with($event)
             ->will($this->returnValue(new TestResult($event)));
 
-        $subject = new EventPublisher([$handler1, $handler2]);
+        $subject = new EventPublisher($this->validEventTypes, [$handler1, $handler2]);
         $subject->publish($event);
     }
 
@@ -102,7 +154,24 @@ class EventPublisherTest extends TestCase
             ->expects($this->never())
             ->method('handle');
 
-        $subject = new EventPublisher([$handler1, $handler2]);
+        $subject = new EventPublisher($this->validEventTypes, [$handler1, $handler2]);
+        $subject->publish($event);
+    }
+
+    public function testPublishRequiresEnabledEventType()
+    {
+        $event = $this->getMockForAbstractClass('Momento\Event');
+        $event
+            ->expects($this->once())
+            ->method('eventType')
+            ->will($this->returnValue('foo'));
+
+        $subject = new EventPublisher($this->validEventTypes);
+        $subject->disable('foo');
+        $this->setExpectedException(
+            'Momento\Exception\InvalidEventTypeException',
+            'Disabled event type [foo]'
+        );
         $subject->publish($event);
     }
 
