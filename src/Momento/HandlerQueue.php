@@ -41,28 +41,19 @@ class HandlerQueue implements Countable, IteratorAggregate
 
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->reset();
-    }
-
-    /**
      * Prevents duplicates and enforces an expected FIFO queue order
      *
-     * @param  EventHandler $handler the handler to insert
-     * @param  int                   $priority   the handler's priority
+     * @param  EventHandler $handler  the handler to insert
+     * @param  int          $priority the handler's priority
      * @throws DuplicateHandlerException - on duplicate handler
      */
-    public function insert(EventHandler $handler, $priority)
+    public function insert(EventHandler $handler, $priority = 0)
     {
         if ($this->contains($handler)) {
             throw new DuplicateHandlerException($handler);
         }
         $priority = [(int) $priority, $this->queueOrder--];
         $this->handlers[] = compact('handler', 'priority');
-        $this->queue->insert($handler, $priority);
     }
 
     /**
@@ -75,7 +66,6 @@ class HandlerQueue implements Countable, IteratorAggregate
         foreach ($this->handlers as $key => $item) {
             if ($item['handler'] == $handler) {
                 unset($this->handlers[$key]);
-                $this->reset();
                 break;
             }
         }
@@ -90,6 +80,15 @@ class HandlerQueue implements Countable, IteratorAggregate
     public function contains(EventHandler $handler)
     {
         return (in_array($handler, $this->toArray(), true));
+    }
+
+    /**
+     * Is the handler list empty
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->handlers);
     }
 
     /**
@@ -123,7 +122,8 @@ class HandlerQueue implements Countable, IteratorAggregate
      */
     public function getIterator()
     {
-        return clone $this->queue;
+        $this->reset();
+        return $this->queue;
     }
 
     /**

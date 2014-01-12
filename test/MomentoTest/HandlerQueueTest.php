@@ -38,7 +38,7 @@ class HandlerQueueTest extends TestCase
     {
         $subject = new HandlerQueue;
         $handler = $this->getMockForAbstractClass('Momento\EventHandler');
-        $subject->insert($handler, 1);
+        $subject->insert($handler);
         $this->setExpectedException(
             'Momento\Exception\DuplicateHandlerException',
             sprintf('Duplicate handler [%s]', get_class($handler))
@@ -50,7 +50,7 @@ class HandlerQueueTest extends TestCase
     {
         $handler = $this->getMockForAbstractClass('Momento\EventHandler');
         $subject = new HandlerQueue;
-        $subject->insert($handler, 1);
+        $subject->insert($handler);
         $this->assertContains($handler, $subject->toArray());
     }
 
@@ -58,9 +58,9 @@ class HandlerQueueTest extends TestCase
     {
         $subject  = new HandlerQueue;
         $handler1 = $this->getMockForAbstractClass('Momento\EventHandler');
-        $subject->insert($handler1, 1);
+        $subject->insert($handler1);
         $handler2 = $this->getMockForAbstractClass('Momento\EventHandler');
-        $subject->insert($handler2, 1);
+        $subject->insert($handler2);
         $subject->remove($handler1);
         $this->assertEquals(1, $subject->count());
     }
@@ -68,8 +68,19 @@ class HandlerQueueTest extends TestCase
     public function testTop()
     {
         $subject = new HandlerQueue;
+        $handler1 = $this->getMockForAbstractClass('Momento\EventHandler');
+        $subject->insert($handler1);
+        $handler2 = $this->getMockForAbstractClass('Momento\EventHandler');
+        $subject->insert($handler2, 2);
+        $this->assertSame($handler2, $subject->top());
+    }
+
+    public function testIsEmpty()
+    {
+        $subject = new HandlerQueue;
+        $this->assertTrue($subject->isEmpty());
         $handler = $this->getMockForAbstractClass('Momento\EventHandler');
-        $subject->insert($handler, 1);
-        $this->assertSame($handler, $subject->top());
+        $subject->insert($handler);
+        $this->assertFalse($subject->isEmpty());
     }
 }
