@@ -10,7 +10,7 @@ namespace Momento;
 
 /**
  * EventResults may contain a variety of data.  They should keep a reference to the
- * {@link Event} that generated it and a $final flag to denote the halting of furher
+ * {@link Event} that generated it and a $final flag to denote the halting of further
  * processing.
  *
  * @author George D. Cooksey, III <texdc3@gmail.com>
