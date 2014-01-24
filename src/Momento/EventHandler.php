@@ -12,22 +12,23 @@ namespace Momento;
  * Handles events with either simple processing or delegating complex tasks to a
  * proper service or model.
  *
- * @author George D. Cooksey, III <texdc3@gmail.com>
+ * @package Momento
  */
 interface EventHandler
 {
     /**
-     * Handle an {@link Event}
+     * Process or delegate an {@link Event}
      *
-     * @param  Event $event the event to handle
+     * @param  Event            $anEvent      the event to handle
+     * @param  EventResult|null $aPriorResult optional result from a prior handler
      * @return EventResult
      */
-    public function handle(Event $event);
+    public function handle(Event $anEvent, EventResult $aPriorResult = null);
 
     /**
      * List the handled event types
      *
-     * @return array
+     * @return string[]
      */
     public function listHandledEventTypes();
 }
