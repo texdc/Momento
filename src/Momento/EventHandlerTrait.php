@@ -20,6 +20,7 @@ trait EventHandlerTrait
      */
     private $handledEventTypes = [];
     
+    
     /**
      * @param  Event            $anEvent      the event to handle
      * @param  EventResult|null $aPriorResult optional result from a prior handler
@@ -47,14 +48,30 @@ trait EventHandlerTrait
     }
     
     /**
+     * Validate an event
+     * 
      * @param  Event $anEvent the event to validate
      * @return void
-     * @throws Exception\InvalidEventException
+     * @throws Exception\InvalidEventTypeException
      */
     private function validate(Event $anEvent)
     {
-        if (!$this->handles($anEvent->eventType())) {
-            throw new Exception\InvalidEventException($anEvent);
+        $eventType = $anEvent->eventType();
+        if (!$this->handles($eventType)) {
+            throw new Exception\InvalidEventTypeException(
+                "$eventType is not a valid event type"
+            );
         }
+    }
+    
+    /**
+     * Set the handled event types
+     * 
+     * @param  string[] $handledEventTypes the handled event types
+     * @return void
+     */
+    private function setHandledEventTypes(array $handledEventTypes = [])
+    {
+        $this->handledEventTypes = $handledEventTypes;
     }
 }
