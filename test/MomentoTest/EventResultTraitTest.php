@@ -21,17 +21,53 @@ class EventResultTraitTest extends TestCase
         $this->assertTrue(trait_exists('Momento\EventResultTrait'));
     }
 
-    public function testEventReturnsEvent()
-    {
-        $event = $this->getMockForAbstractClass('Momento\Event');
-        $subject = new TestResult($event);
-        $this->assertSame($event, $subject->event());
-    }
-
     public function testIsFinalReturnsBool()
     {
-        $event = $this->getMockForAbstractClass('Momento\Event');
-        $subject = new TestResult($event, true);
+        $subject = new TestResult(true);
         $this->assertTrue($subject->isFinal());
+    }
+
+    public function testIsSuccessReturnsBool()
+    {
+        $subject = new TestResult();
+        $this->assertTrue($subject->isSuccess());
+    }
+
+    public function testGetErrorsReturnsArray()
+    {
+        $subject = new TestResult();
+        $this->assertInternalType('array', $subject->getErrors());
+    }
+
+    public function testMagicGetThrowsException()
+    {
+        $this->setExpectedException(
+            'Momento\Exception\InvalidPropertyException',
+            'foo is not a valid property'
+        );
+        $subject = new TestResult();
+        $subject->foo;
+    }
+
+    public function testMagicGetUsesGetter()
+    {
+        $subject = new TestResult();
+        $this->assertInternalType('array', $subject->errors);
+    }
+
+    public function testMagicGetUsesProperty()
+    {
+        $subject = new TestResult();
+        $this->assertInternalType('boolean', $subject->final);
+    }
+
+    public function testMagicSetThrowsException()
+    {
+        $this->setExpectedException(
+            'Momento\Exception\ImmutableException',
+            'MomentoTest\TestAsset\TestResult is immutable'
+        );
+        $subject = new TestResult();
+        $subject->final = false;
     }
 }

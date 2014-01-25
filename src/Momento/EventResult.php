@@ -9,20 +9,20 @@
 namespace Momento;
 
 /**
- * EventResults may contain a variety of data.  They should keep a reference to the
- * {@link Event} that generated it and a $final flag to denote the halting of further
- * processing.
+ * EventResults are value objects that may contain a variety of data.  The minimum
+ * should be a $final flag to denote the halting of further processing, a $success
+ * flag to denote successful processing, and a potential list of processing errors.
  *
- * @author George D. Cooksey, III <texdc3@gmail.com>
+ * @package Momento
  */
 interface EventResult
 {
     /**
-     * Get the event
+     * Was the processing successful?
      *
-     * @return Event
+     * @return bool
      */
-    public function event();
+    public function isSuccess();
 
     /**
      * Should event processing be halted?
@@ -30,4 +30,11 @@ interface EventResult
      * @return bool
      */
     public function isFinal();
+
+    /**
+     * Get the processing errors
+     *
+     * @return string[]
+     */
+    public function getErrors();
 }
