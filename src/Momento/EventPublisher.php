@@ -13,7 +13,7 @@ use Momento\Exception\InvalidEventTypeException;
 /**
  * Manages a prioritized set of {@link EventHandler} instances by event type.
  *
- * @author George D. Cooksey, III <texdc3@gmail.com>
+ * @package Momento
  */
 class EventPublisher
 {
@@ -52,7 +52,7 @@ class EventPublisher
 
     /**
      * Publish an event
-     * 
+     *
      * Published events are verified against a list of enabled types.
      *
      * @param  Event $event the event to publish
@@ -60,7 +60,7 @@ class EventPublisher
      */
     public function publish(Event $event)
     {
-        $eventType = $event->eventType();
+        $eventType = $event->getType();
         $result    = null;
 
         $this->guardEnabledEventType($eventType);
