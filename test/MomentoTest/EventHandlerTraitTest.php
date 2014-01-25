@@ -1,17 +1,24 @@
 <?php
+/**
+ * EventHandlerTraitTest.php
+ *
+ * @copyright 2014 George D. Cooksey, III
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ */
 
 namespace MomentoTest;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use MomentoTest\TestAsset\TestEventHandler;
 
+/**
+ * @covers \Momento\EventHandlerTrait
+ */
 class EventHandlerTraitTest extends TestCase
 {
-    private static $traitClassname = 'Momento\EventHandlerTrait';
-
     public function testTraitExists()
     {
-        $this->assertTrue(trait_exists(static::$traitClassname));
+        $this->assertTrue(trait_exists('Momento\EventHandlerTrait'));
     }
 
     public function testListHandledEventTypesReturnsArray()
