@@ -147,9 +147,9 @@ class EventPublisherTest extends TestCase
             ->expects($this->once())
             ->method('handle')
             ->with($event)
-            ->will($this->returnValue(new TestResult($event, true)));
+            ->will($this->returnValue(new TestResult));
 
-        $handler2 = $this->buildHandler();
+        $handler2 = $this->buildHandler(['foo']);
         $handler2
             ->expects($this->never())
             ->method('handle');

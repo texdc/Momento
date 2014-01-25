@@ -8,16 +8,16 @@
 
 namespace MomentoTest\TestAsset;
 
-use Momento\Event;
 use Momento\EventResult;
+use Momento\EventResultTrait;
 
 class TestResult implements EventResult
 {
-    use \Momento\EventResultTrait;
+    use EventResultTrait;
 
-    public function __construct(Event $event, $final = false)
+    public function __construct($asFinal = false, array $withErrors = [])
     {
-        $this->event = $event;
-        $this->final = $final;
+        $this->setFinal($asFinal);
+        $this->setErrors($withErrors);
     }
 }
