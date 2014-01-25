@@ -56,7 +56,7 @@ trait EventHandlerTrait
      */
     private function validate(Event $anEvent)
     {
-        $eventType = $anEvent->eventType();
+        $eventType = $anEvent->getType();
         if (!$this->handles($eventType)) {
             throw new Exception\InvalidEventTypeException(
                 "$eventType is not a valid event type"

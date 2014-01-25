@@ -43,7 +43,7 @@ class EventHandlerTraitTest extends TestCase
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
-            ->method('eventType')
+            ->method('getType')
             ->will($this->returnValue('foo'));
         $subject->handle($event);
     }
@@ -54,7 +54,7 @@ class EventHandlerTraitTest extends TestCase
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
-            ->method('eventType')
+            ->method('getType')
             ->will($this->returnValue('test'));
         $this->assertInstanceOf('Momento\EventResult', $subject->handle($event));
     }

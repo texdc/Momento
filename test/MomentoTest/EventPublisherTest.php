@@ -115,7 +115,7 @@ class EventPublisherTest extends TestCase
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
-            ->method('eventType')
+            ->method('getType')
             ->will($this->returnValue('test'));
 
         $handler1 = $this->buildHandler(['foo']);
@@ -139,7 +139,7 @@ class EventPublisherTest extends TestCase
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
-            ->method('eventType')
+            ->method('getType')
             ->will($this->returnValue('test'));
 
         $handler1 = $this->buildHandler();
@@ -163,7 +163,7 @@ class EventPublisherTest extends TestCase
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
-            ->method('eventType')
+            ->method('getType')
             ->will($this->returnValue('foo'));
 
         $subject = new EventPublisher($this->validEventTypes);

@@ -11,7 +11,7 @@ namespace Momento;
 /**
  * Decorates a {@link Event} with a unique identifier
  *
- * @author George D. Cooksey, III <texdc3@gmail.com>
+ * @package Momento
  */
 class StoredEvent
 {
@@ -52,9 +52,9 @@ class StoredEvent
      *
      * @return \DateTime
      */
-    public function occurredOn()
+    public function getOcurrenceDate()
     {
-        return $this->event->occurredOn();
+        return $this->event->getOcurrenceDate();
     }
 
     /**
@@ -72,9 +72,9 @@ class StoredEvent
      *
      * @return string
      */
-    public function eventType()
+    public function getType()
     {
-        return $this->event->eventType();
+        return $this->event->getType();
     }
 
     /**
