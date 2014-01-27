@@ -15,7 +15,7 @@ use DomainException;
  * 
  * @package Momento
  */
-class EventStatus
+final class EventStatus
 {
     /**#@+
      * @var string
@@ -52,7 +52,10 @@ class EventStatus
     
     /**
      * Allow static initialization
-     *
+     * <code>
+     * $status = EventStatus::Stopped();
+     * </code>
+     * 
      * @param  string $aStatus   the event status
      * @param  array  $arguments ignored
      * @return self
@@ -84,6 +87,16 @@ class EventStatus
     public function isFailed()
     {
         return ($this->status == static::FAILED);
+    }
+    
+    /**
+     * Convert to a string
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->status;
     }
     
     /**
