@@ -8,11 +8,9 @@
 
 namespace Momento;
 
-use DomainException;
-
 /**
  * Event lifecycle status: success, stopped, or failed
- * 
+ *
  * @package Momento
  */
 final class EventStatus
@@ -20,42 +18,42 @@ final class EventStatus
     /**#@+
      * @var string
      */
-    const SUCCESS = 'success';
-    const STOPPED = 'stopped';
-    const FAILED  = 'failed';
+    const STATUS_SUCCESS = 'success';
+    const STATUS_STOPPED = 'stopped';
+    const STATUS_FAILED  = 'failed';
     /**#@- */
-    
+
     /**
      * @var string[]
      */
     private static $validStatuses = [
-        self::SUCCESS,
-        self::STOPPED,
-        self::FAILED
+        self::STATUS_SUCCESS,
+        self::STATUS_STOPPED,
+        self::STATUS_FAILED
     ];
-    
+
     /**
      * @var string
      */
-    private $status = self::SUCCESS;
-    
-    
+    private $status = self::STATUS_SUCCESS;
+
+
     /**
      * Constructor
-     * 
+     *
      * @param string $aStatus the event status
      */
-    public function __construct($aStatus = self::SUCCESS)
+    public function __construct($aStatus = self::STATUS_SUCCESS)
     {
         $this->status = $this->sanitizeAndValidate($aStatus);
     }
-    
+
     /**
      * Allow static initialization
      * <code>
      * $status = EventStatus::Stopped();
      * </code>
-     * 
+     *
      * @param  string $aStatus   the event status
      * @param  array  $arguments ignored
      * @return self
@@ -64,41 +62,41 @@ final class EventStatus
     {
         return new static($aStatus);
     }
-    
+
     /**
      * @return bool
      */
     public function isSuccess()
     {
-        return ($this->status == static::SUCCESS);
+        return ($this->status == static::STATUS_SUCCESS);
     }
-    
+
     /**
      * @return bool
      */
     public function isStopped()
     {
-        return ($this->status == static::STOPPED);
+        return ($this->status == static::STATUS_STOPPED);
     }
-    
+
     /**
      * @return bool
      */
     public function isFailed()
     {
-        return ($this->status == static::FAILED);
+        return ($this->status == static::STATUS_FAILED);
     }
-    
+
     /**
      * Convert to a string
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
         return $this->status;
     }
-    
+
     /**
      * @param  string $aStatus the status
      * @return string
@@ -107,7 +105,7 @@ final class EventStatus
     {
         return strtolower(trim($aStatus));
     }
-    
+
     /**
      * @param  string $aStatus the status
      * @return void
@@ -116,10 +114,12 @@ final class EventStatus
     private function validate($aStatus)
     {
         if (!in_array($aStatus, static::$validStatuses)) {
-            throw new DomainException("Invalid event status [$aStatus]");
+            throw new Exception\InvalidEventStatusException(
+                "Invalid event status [$aStatus]"
+            );
         }
     }
-    
+
     /**
      * @param  string $aStatus the status
      * @return string
