@@ -56,6 +56,6 @@ class EventHandlerTraitTest extends TestCase
             ->expects($this->once())
             ->method('getType')
             ->will($this->returnValue('test'));
-        $this->assertInstanceOf('Momento\EventResult', $subject->handle($event));
+        $subject->handle($event);
     }
 }

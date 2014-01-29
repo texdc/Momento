@@ -25,6 +25,5 @@ class TestEventHandler implements EventHandler
     public function handle(Event $anEvent, EventResult $aPriorResult = null)
     {
         $this->validate($anEvent);
-        return new TestResult($anEvent);
     }
 }
