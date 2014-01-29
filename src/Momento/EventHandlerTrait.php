@@ -10,7 +10,7 @@ namespace Momento;
 
 /**
  * A basic implementation of the {@link EventHandler} interface
- * 
+ *
  * @package Momento
  */
 trait EventHandlerTrait
@@ -19,18 +19,16 @@ trait EventHandlerTrait
      * @var string[]
      */
     private $handledEventTypes = [];
-    
-    
+
+
     /**
-     * @param  Event            $anEvent      the event to handle
-     * @param  EventResult|null $aPriorResult optional result from a prior handler
-     * @return EventResult
+     * @see EventHandler::handle()
      */
-    abstract public function handle(Event $anEvent, EventResult $aPriorResult = null);
-    
+    abstract public function handle(Event $anEvent);
+
     /**
      * Is an event type handled?
-     * 
+     *
      * @param  string $anEventType the event type to check
      * @return bool
      */
@@ -38,7 +36,7 @@ trait EventHandlerTrait
     {
         return in_array($anEventType, $this->handledEventTypes);
     }
-    
+
     /**
      * @return string[]
      */
@@ -46,27 +44,27 @@ trait EventHandlerTrait
     {
         return $this->handledEventTypes;
     }
-    
+
     /**
      * Validate an event
-     * 
+     *
      * @param  Event $anEvent the event to validate
      * @return void
      * @throws Exception\InvalidEventTypeException
      */
     private function validate(Event $anEvent)
     {
-        $eventType = $anEvent->eventType();
+        $eventType = $anEvent->getType();
         if (!$this->handles($eventType)) {
             throw new Exception\InvalidEventTypeException(
                 "$eventType is not a valid event type"
             );
         }
     }
-    
+
     /**
      * Set the handled event types
-     * 
+     *
      * @param  string[] $handledEventTypes the handled event types
      * @return void
      */

@@ -19,11 +19,10 @@ interface EventHandler
     /**
      * Process or delegate an {@link Event}
      *
-     * @param  Event            $anEvent      the event to handle
-     * @param  EventResult|null $aPriorResult optional result from a prior handler
-     * @return EventResult
+     * @param  Event $anEvent the event to handle
+     * @return void
      */
-    public function handle(Event $anEvent, EventResult $aPriorResult = null);
+    public function handle(Event $anEvent);
 
     /**
      * List the handled event types
