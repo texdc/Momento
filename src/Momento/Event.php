@@ -13,8 +13,8 @@ use DateTime;
 /**
  * Captures the memory of something interesting which affects the domain
  *
- * @link   http://martinfowler.com/eaaDev/DomainEvent.html
- * @author George D. Cooksey, III <texdc3@gmail.com>
+ * @link    http://martinfowler.com/eaaDev/DomainEvent.html
+ * @package Momento
  */
 interface Event
 {
@@ -23,14 +23,14 @@ interface Event
      *
      * @return DateTime|int
      */
-    public function occurredOn();
+    public function getOcurrenceDate();
 
     /**
      * Get the event's type
      *
      * @return string
      */
-    public function eventType();
+    public function getType();
 
     /**
      * Convert to a string

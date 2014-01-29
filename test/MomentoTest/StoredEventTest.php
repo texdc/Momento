@@ -32,11 +32,11 @@ class StoredEventTest extends TestCase
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
-            ->method('occurredOn')
+            ->method('getOcurrenceDate')
             ->will($this->returnValue($expectedDate));
 
         $subject = new StoredEvent($event);
-        $this->assertSame($expectedDate, $subject->occurredOn());
+        $this->assertSame($expectedDate, $subject->getOcurrenceDate());
     }
 
     public function testToDomainEventReturnsContainedEvent()
@@ -51,10 +51,10 @@ class StoredEventTest extends TestCase
         $event = $this->getMockForAbstractClass('Momento\Event');
         $event
             ->expects($this->once())
-            ->method('eventType')
+            ->method('getType')
             ->will($this->returnValue('test'));
         $subject = new StoredEvent($event);
-        $this->assertEquals('test', $subject->eventType());
+        $this->assertEquals('test', $subject->getType());
     }
 
     public function testEqualsComparesEventId()
