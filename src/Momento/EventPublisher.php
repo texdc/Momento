@@ -56,22 +56,15 @@ class EventPublisher
      * Published events are verified against a list of enabled types.
      *
      * @param  Event $event the event to publish
-     * @return EventResult|null
+     * @return void
      */
     public function publish(Event $event)
     {
         $eventType = $event->getType();
-        $result    = null;
-
         $this->guardEnabledEventType($eventType);
         foreach ($this->handlers[$eventType] as $handler) {
-            $result = $handler->handle($event);
-            if ($result->isFinal()) {
-                break; // processing has been halted
-            }
+            $handler->handle($event);
         }
-
-        return $result;
     }
 
     /**
