@@ -11,7 +11,7 @@ namespace Momento;
 /**
  * A basic implementation of the {@link EventHandler} interface
  *
- * @package Momento
+ * @author George D. Cooksey, III
  */
 trait EventHandlerTrait
 {
@@ -24,7 +24,7 @@ trait EventHandlerTrait
     /**
      * @see EventHandler::handle()
      */
-    abstract public function handle(Event $anEvent);
+    abstract public function handle(EventInterface $anEvent);
 
     /**
      * Is an event type handled?
@@ -52,9 +52,9 @@ trait EventHandlerTrait
      * @return void
      * @throws Exception\InvalidEventTypeException
      */
-    private function validate(Event $anEvent)
+    private function validate(EventInterface $anEvent)
     {
-        $eventType = $anEvent->getType();
+        $eventType = $anEvent->eventType();
         if (!$this->handles($eventType)) {
             throw new Exception\InvalidEventTypeException(
                 "$eventType is not a valid event type"

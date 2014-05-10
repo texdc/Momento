@@ -40,10 +40,10 @@ class EventHandlerTraitTest extends TestCase
     {
         $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
         $subject = new TestEventHandler(['test']);
-        $event = $this->getMockForAbstractClass('Momento\Event');
+        $event = $this->getMockForAbstractClass('Momento\EventInterface');
         $event
             ->expects($this->once())
-            ->method('getType')
+            ->method('eventType')
             ->will($this->returnValue('foo'));
         $subject->handle($event);
     }
@@ -51,10 +51,10 @@ class EventHandlerTraitTest extends TestCase
     public function testValidatePassesValidEventType()
     {
         $subject = new TestEventHandler(['test']);
-        $event = $this->getMockForAbstractClass('Momento\Event');
+        $event = $this->getMockForAbstractClass('Momento\EventInterface');
         $event
             ->expects($this->once())
-            ->method('getType')
+            ->method('eventType')
             ->will($this->returnValue('test'));
         $subject->handle($event);
     }
