@@ -9,9 +9,9 @@
 namespace Momento;
 
 /**
- * Decorates a {@link Event} with a unique identifier
+ * Decorates a {@link EventInterface} with a unique identifier
  *
- * @package Momento
+ * @author George D. Cooksey, III
  */
 class StoredEvent
 {
@@ -22,7 +22,7 @@ class StoredEvent
     protected $eventId;
 
     /**
-     * @var Event
+     * @var EventInterface
      */
     private $event;
 
@@ -32,7 +32,7 @@ class StoredEvent
      *
      * @param Event $event the event to store
      */
-    public function __construct(Event $event)
+    public function __construct(EventInterface $event)
     {
         $this->event = $event;
     }
@@ -54,13 +54,13 @@ class StoredEvent
      */
     public function getOcurrenceDate()
     {
-        return $this->event->getOcurrenceDate();
+        return $this->event->occurrenceDate();
     }
 
     /**
      * Get the domain event
      *
-     * @return Event
+     * @return EventInterface
      */
     public function toEvent()
     {
@@ -74,7 +74,7 @@ class StoredEvent
      */
     public function getType()
     {
-        return $this->event->getType();
+        return $this->event->eventType();
     }
 
     /**
@@ -97,6 +97,6 @@ class StoredEvent
     public function __toString()
     {
         $format = 'StoredEvent [eventId=%u, event=%s]';
-        return sprintf($format, $this->eventId, $this->event);
+        return sprintf($format, $this->eventId, get_class($this->event));
     }
 }

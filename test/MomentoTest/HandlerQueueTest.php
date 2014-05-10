@@ -37,7 +37,7 @@ class HandlerQueueTest extends TestCase
     public function testInsertRejectsDuplicates()
     {
         $subject = new HandlerQueue;
-        $handler = $this->getMockForAbstractClass('Momento\EventHandler');
+        $handler = $this->getMockForAbstractClass('Momento\EventHandlerInterface');
         $subject->insert($handler);
         $this->setExpectedException(
             'Momento\Exception\DuplicateHandlerException',
@@ -48,7 +48,7 @@ class HandlerQueueTest extends TestCase
 
     public function testToArrayContainsInsertedHandlers()
     {
-        $handler = $this->getMockForAbstractClass('Momento\EventHandler');
+        $handler = $this->getMockForAbstractClass('Momento\EventHandlerInterface');
         $subject = new HandlerQueue;
         $subject->insert($handler);
         $this->assertContains($handler, $subject->toArray());
@@ -57,9 +57,9 @@ class HandlerQueueTest extends TestCase
     public function testRemoveResetsQueue()
     {
         $subject  = new HandlerQueue;
-        $handler1 = $this->getMockForAbstractClass('Momento\EventHandler');
+        $handler1 = $this->getMockForAbstractClass('Momento\EventHandlerInterface');
         $subject->insert($handler1);
-        $handler2 = $this->getMockForAbstractClass('Momento\EventHandler');
+        $handler2 = $this->getMockForAbstractClass('Momento\EventHandlerInterface');
         $subject->insert($handler2);
         $subject->remove($handler1);
         $this->assertEquals(1, $subject->count());
@@ -68,9 +68,9 @@ class HandlerQueueTest extends TestCase
     public function testTop()
     {
         $subject = new HandlerQueue;
-        $handler1 = $this->getMockForAbstractClass('Momento\EventHandler');
+        $handler1 = $this->getMockForAbstractClass('Momento\EventHandlerInterface');
         $subject->insert($handler1);
-        $handler2 = $this->getMockForAbstractClass('Momento\EventHandler');
+        $handler2 = $this->getMockForAbstractClass('Momento\EventHandlerInterface');
         $subject->insert($handler2, 2);
         $this->assertSame($handler2, $subject->top());
     }
@@ -79,7 +79,7 @@ class HandlerQueueTest extends TestCase
     {
         $subject = new HandlerQueue;
         $this->assertTrue($subject->isEmpty());
-        $handler = $this->getMockForAbstractClass('Momento\EventHandler');
+        $handler = $this->getMockForAbstractClass('Momento\EventHandlerInterface');
         $subject->insert($handler);
         $this->assertFalse($subject->isEmpty());
     }

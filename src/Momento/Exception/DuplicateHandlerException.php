@@ -10,7 +10,7 @@ namespace Momento\Exception;
 
 use Exception as SplException;
 use InvalidArgumentException;
-use Momento\EventHandler;
+use Momento\EventHandlerInterface;
 
 /**
  * Announces a duplicate handler
@@ -37,7 +37,7 @@ class DuplicateHandlerException extends InvalidArgumentException
         $code = null,
         SplException $previous = null
     ) {
-        if ($message instanceof EventHandler) {
+        if ($message instanceof EventHandlerInterface) {
             $message = sprintf('%s [%s]', static::DEFAULT_MESSAGE, get_class($message));
         }
         parent::__construct($message, $code, $previous);

@@ -15,9 +15,9 @@ use SplPriorityQueue;
 use Momento\Exception\DuplicateHandlerException;
 
 /**
- * A reusable, prioritized queue for {@link EventHandler} instances
+ * A reusable, prioritized queue for {@link EventHandlerInterface} instances
  *
- * @author George D. Cooksey, III <texdc3@gmail.com>
+ * @author George D. Cooksey, III
  */
 class HandlerQueue implements Countable, IteratorAggregate
 {
@@ -47,7 +47,7 @@ class HandlerQueue implements Countable, IteratorAggregate
      * @param  int          $priority the handler's priority
      * @throws DuplicateHandlerException - on duplicate handler
      */
-    public function insert(EventHandler $handler, $priority = 0)
+    public function insert(EventHandlerInterface $handler, $priority = 0)
     {
         if ($this->contains($handler)) {
             throw new DuplicateHandlerException($handler);
@@ -61,7 +61,7 @@ class HandlerQueue implements Countable, IteratorAggregate
      *
      * @param EventHandler $handler the handler to remove
      */
-    public function remove(EventHandler $handler)
+    public function remove(EventHandlerInterface $handler)
     {
         foreach ($this->handlers as $key => $item) {
             if ($item['handler'] == $handler) {
@@ -77,7 +77,7 @@ class HandlerQueue implements Countable, IteratorAggregate
      * @param  EventHandler $handler the handler to check
      * @return bool
      */
-    public function contains(EventHandler $handler)
+    public function contains(EventHandlerInterface $handler)
     {
         return (in_array($handler, $this->toArray(), true));
     }
