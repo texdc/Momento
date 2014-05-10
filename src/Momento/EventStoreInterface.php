@@ -21,21 +21,21 @@ use Momento\Exception\RemovalPreventedException;
 interface EventStoreInterface extends Countable
 {
     /**
-     * Find all the {@link EventInterface}s between two given ids
+     * Find all the {@link EventInterface}s which occurred between two given timestamps
      *
-     * @param  EventId $lowerId the lower bound id
-     * @param  EventId $upperId the upper bound id
+     * @param  int|float $lowerTime the lower bound timestamp
+     * @param  int|float $upperTime the upper bound timestamp
      * @return EventInterface[]
      */
-    public function allBetween(EventId $lowerId, EventId $upperId);
+    public function allBetween($lowerTime, $upperTime);
 
     /**
-     * Find all the {@link EventInterface}s after a given id
+     * Find all the {@link EventInterface}s which occurred after a given timestamp
      *
-     * @param  EventId $eventId the pivot id
+     * @param  int|float $timestamp the pivot timestamp
      * @return EventInterface[]
      */
-    public function allSince(EventId $eventId);
+    public function allSince($timestamp);
 
     /**
      * Append an event
