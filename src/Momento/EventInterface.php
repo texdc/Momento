@@ -8,13 +8,16 @@
 
 namespace Momento;
 
+use JsonSerializable;
+use Serializable;
+
 /**
  * Captures the memory of something interesting which affects the domain
  *
  * @link   http://martinfowler.com/eaaDev/DomainEvent.html
  * @author George D. Cooksey, III
  */
-interface EventInterface
+interface EventInterface extends JsonSerializable, Serializable
 {
     /**
      * Get the unique identifier

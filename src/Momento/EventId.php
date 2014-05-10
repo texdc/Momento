@@ -10,6 +10,8 @@ namespace Momento;
 
 use DateTime;
 use InvalidArgumentException;
+use Serializable;
+use JsonSerializable;
 
 /**
  * Provides a rich identity for events that encapsulates the event type and timestamp
@@ -17,7 +19,7 @@ use InvalidArgumentException;
  *
  * @author George D. Cooksey, III
  */
-class EventId
+class EventId implements JsonSerializable, Serializable
 {
     /**
      * @var string
@@ -104,6 +106,38 @@ class EventId
             && $this->time == $other->time
             && $this->hash == $other->hash
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return array(
+            'hash' => $this->hash,
+            'time' => $this->time,
+            'type' => $this->type,
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize($this->jsonSerialize());
+    }
+
+    /**
+     * @param  string $serialized
+     * @return EventId
+     */
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+        $this->hash = $data['hash'];
+        $this->time = $data['time'];
+        $this->type = $data['type'];
     }
 
     /**

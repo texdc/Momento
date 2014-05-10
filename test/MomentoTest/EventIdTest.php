@@ -25,6 +25,16 @@ class EventIdTest extends TestCase
         $this->eventId = new EventId(static::EVENT_TYPE);
     }
 
+    public function testInstanceOfJsonSerializable()
+    {
+        $this->assertInstanceOf('JsonSerializable', $this->eventId);
+    }
+
+    public function testInstanceOfSerializable()
+    {
+        $this->assertInstanceOf('Serializable', $this->eventId);
+    }
+
     public function testEventType()
     {
         $this->assertSame(static::EVENT_TYPE, $this->eventId->eventType());
@@ -42,7 +52,8 @@ class EventIdTest extends TestCase
 
     public function testToString()
     {
-        $this->assertRegExp('#\w*_\d{10}\.\d{6}_\w{8}#', (string) $this->eventId);
+        $match = '#[a-z0-9_\.\-\\]+_\d{10}\.\d{6}_[a-f0-9]{8}#i';
+        $this->assertRegExp($match, (string) $this->eventId);
     }
 
     public function testFromStringThrowsException()
@@ -58,5 +69,21 @@ class EventIdTest extends TestCase
     {
         $id = (string) $this->eventId;
         $this->assertTrue($this->eventId->equals(EventId::fromString($id)));
+    }
+
+    public function testJsonSerialize()
+    {
+        $this->assertInternalType('string', json_encode($this->eventId));
+    }
+
+    public function testSerialize()
+    {
+        $this->assertInternalType('string', serialize($this->eventId));
+    }
+
+    public function testUnserialize()
+    {
+        $data = serialize($this->eventId);
+        $this->assertTrue($this->eventId->equals(unserialize($data)));
     }
 }
