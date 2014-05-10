@@ -11,9 +11,9 @@ namespace Momento;
 use Momento\Exception\InvalidEventTypeException;
 
 /**
- * Manages a prioritized set of {@link EventHandler} instances by event type.
+ * Manages a prioritized set of {@link EventHandlerInterface} instances by event type.
  *
- * @package Momento
+ * @author George D. Cooksey, III
  */
 class EventPublisher
 {
@@ -58,9 +58,9 @@ class EventPublisher
      * @param  Event $event the event to publish
      * @return void
      */
-    public function publish(Event $event)
+    public function publish(EventInterface $event)
     {
-        $eventType = $event->getType();
+        $eventType = $event->eventType();
         $this->guardEnabledEventType($eventType);
         foreach ($this->handlers[$eventType] as $handler) {
             $handler->handle($event);
@@ -101,7 +101,7 @@ class EventPublisher
      * @param  int          $withPriority the handler's priority
      * @return void
      */
-    public function register(EventHandler $handler, $withPriority = 0)
+    public function register(EventHandlerInterface $handler, $withPriority = 0)
     {
         foreach ($handler->listHandledEventTypes() as $eventType) {
             try {
@@ -122,7 +122,7 @@ class EventPublisher
      * @param  EventHandler $handler the handler to unregister
      * @return void
      */
-    public function unregister(EventHandler $handler)
+    public function unregister(EventHandlerInterface $handler)
     {
         foreach ($handler->listHandledEventTypes() as $eventType) {
             if (isset($this->handlers[$eventType])) {

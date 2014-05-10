@@ -8,10 +8,9 @@
 
 namespace MomentoTest\TestAsset;
 
-use Momento\Event;
-use Momento\EventHandler;
+use Momento\EventHandlerInterface as EventHandler;
 use Momento\EventHandlerTrait;
-use Momento\EventResult;
+use Momento\EventInterface as Event;
 
 class TestEventHandler implements EventHandler
 {
