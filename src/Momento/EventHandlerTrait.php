@@ -8,68 +8,48 @@
 
 namespace Momento;
 
+use Momento\Exception\InvalidEventTypeException;
+
 /**
- * A basic implementation of the {@link EventHandler} interface
+ * A basic implementation of the {@link EventHandlerInteface}
  *
  * @author George D. Cooksey, III
  */
 trait EventHandlerTrait
 {
     /**
-     * @var string[]
-     */
-    private $handledEventTypes = [];
-
-
-    /**
-     * @see EventHandler::handle()
-     */
-    abstract public function handle(EventInterface $anEvent);
-
-    /**
-     * Is an event type handled?
+     * List the events that are valid for this handler
      *
-     * @param  string $anEventType the event type to check
-     * @return bool
-     */
-    public function handles($anEventType)
-    {
-        return in_array($anEventType, $this->handledEventTypes);
-    }
-
-    /**
      * @return string[]
      */
-    public function listHandledEventTypes()
+    public function validEventTypes()
     {
-        return $this->handledEventTypes;
+        return static::$validEventTypes;
     }
 
     /**
-     * Validate an event
+     * Verify a handled event type
      *
-     * @param  Event $anEvent the event to validate
-     * @return void
-     * @throws Exception\InvalidEventTypeException
+     * @param  string $anEventType the event type to verify
+     * @return bool
      */
-    private function validate(EventInterface $anEvent)
+    public static function validateEventType($anEventType)
     {
-        $eventType = $anEvent->eventType();
-        if (!$this->handles($eventType)) {
-            throw new Exception\InvalidEventTypeException(
-                "$eventType is not a valid event type"
+        return in_array($anEventType, static::$validEventTypes);
+    }
+
+    /**
+     * Protects against invalid event types
+     *
+     * @param  string $anEventType the event type to verify
+     * @throws InvalidEventTypeException
+     */
+    private function guardValidEventType($anEventType)
+    {
+        if (!static::validateEventType($anEventType)) {
+            throw new InvalidEventTypeException(
+                "$anEventType is not a valid event type"
             );
         }
-    }
-
-    /**
-     * Set the handled event types
-     *
-     * @param  string[] $handledEventTypes the handled event types
-     * @return void
-     */
-    private function setHandledEventTypes(array $handledEventTypes = [])
-    {
-        $this->handledEventTypes = $handledEventTypes;
     }
 }

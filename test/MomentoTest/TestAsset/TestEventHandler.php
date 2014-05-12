@@ -16,13 +16,14 @@ class TestEventHandler implements EventHandler
 {
     use EventHandlerTrait;
 
-    public function __construct(array $handledEventTypes = [])
-    {
-        $this->setHandledEventTypes($handledEventTypes);
-    }
+    const EVENT_TYPE_TEST = 'test';
 
-    public function handle(Event $anEvent, EventResult $aPriorResult = null)
+    protected static $validEventTypes = [
+        self::EVENT_TYPE_TEST
+    ];
+
+    public function __invoke(Event $anEvent)
     {
-        $this->validate($anEvent);
+        $this->guardValidEventType($anEvent->eventType());
     }
 }

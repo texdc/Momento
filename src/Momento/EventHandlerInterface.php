@@ -19,15 +19,22 @@ interface EventHandlerInterface
     /**
      * Process or delegate an {@link EventInterface}
      *
-     * @param  Event $anEvent the event to handle
-     * @return void
+     * @param EventInterface $anEvent the event to handle
      */
-    public function handle(EventInterface $anEvent);
+    public function __invoke(EventInterface $anEvent);
 
     /**
-     * List the handled event types
+     * List the events that are valid for this handler
      *
      * @return string[]
      */
-    public function listHandledEventTypes();
+    public function validEventTypes();
+
+    /**
+     * Verify a handled event type
+     *
+     * @param  string $anEventType the event type to verify
+     * @return bool
+     */
+    public static function validateEventType($anEventType);
 }
