@@ -15,19 +15,17 @@ use Momento\Exception\InvalidEventTypeException;
  *
  * @author George D. Cooksey, III
  */
-class EventPublisher
+class EventPublisher implements EventPublisherInterface
 {
+    /**
+     * @var string[]
+     */
+    protected static $defaultEventTypes = [self::EVENT_TYPE_ALL];
 
     /**
-     * @var EventHandler[]
+     * @var HandlerQueue[]
      */
-    protected $handlers = [];
-
-    /**
-     * @var string[] event type => enabled flag
-     */
-    protected $validEventTypes = [];
-
+    protected $queues = [];
 
     /**
      * Constructor
@@ -35,12 +33,10 @@ class EventPublisher
      * If $handlers is multi-dimensional, the inner array(s) must have two keys,
      * handler and priority.
      *
-     * @param string[] $validEventTypes the event types valid for this publisher
-     * @param array    $handlers        the handlers to register
+     * @param callable[] $handlers the handlers to register
      */
-    public function __construct(array $validEventTypes, array $handlers = [])
+    public function __construct(array $handlers)
     {
-        $this->setValidEventTypes($validEventTypes);
         foreach ($handlers as $handler) {
             $priority = 0;
             if (is_array($handler)) {
@@ -53,168 +49,47 @@ class EventPublisher
     /**
      * Publish an event
      *
-     * Published events are verified against a list of enabled types.
-     *
-     * @param  Event $event the event to publish
-     * @return void
+     * @param Event $anEvent the event to publish
      */
-    public function publish(EventInterface $event)
+    public function publish(EventInterface $anEvent)
     {
-        $eventType = $event->eventType();
-        $this->guardEnabledEventType($eventType);
-        foreach ($this->handlers[$eventType] as $handler) {
-            $handler->handle($event);
+        foreach ($this->initQueue($anEvent->eventType(), []) as $handler) {
+            $handler($anEvent);
         }
-    }
-
-    /**
-     * Enable an event type
-     *
-     * @param  string $eventType the event type to enable
-     * @return void
-     */
-    public function enable($eventType)
-    {
-        $this->guardValidEventType((string) $eventType);
-        $this->validEventTypes[(string) $eventType] = true;
-    }
-
-    /**
-     * Disable an event type
-     *
-     * @param  string $eventType the event type to disable
-     * @return void
-     */
-    public function disable($eventType)
-    {
-        $this->guardValidEventType((string) $eventType);
-        $this->validEventTypes[(string) $eventType] = false;
+        foreach ($this->initQueue() as $handler) {
+            $handler($anEvent);
+        }
     }
 
     /**
      * Register a handler
      *
-     * Any event types handled by the handler which are not valid for this publisher
-     * will be overlooked to prevent unnecessary handler queues.
-     *
-     * @param  EventHandler $handler      the handler to register
-     * @param  int          $withPriority the handler's priority
-     * @return void
+     * @param callable $aHandler     the handler to register
+     * @param int      $withPriority the handler's priority
      */
-    public function register(EventHandlerInterface $handler, $withPriority = 0)
+    private function register(callable $aHandler, $withPriority = 0)
     {
-        foreach ($handler->listHandledEventTypes() as $eventType) {
-            try {
-                $this->guardValidEventType($eventType);
-                if (!isset($this->handlers[$eventType])) {
-                    $this->handlers[$eventType] = new HandlerQueue;
-                }
-                $this->handlers[$eventType]->insert($handler, $withPriority);
-            } catch (InvalidEventTypeException $exception) {
-                continue;
-            }
+        $eventTypes = ($aHandler instanceof EventHandlerInterface)
+            ? $aHandler->validEventTypes()
+            : static::$defaultEventTypes;
+
+        foreach ($eventTypes as $eventType) {
+            $this->initQueue($eventType)->insert($aHandler, $withPriority);
         }
     }
 
     /**
-     * Unregister a handler
+     * Initialize an event handler queue
      *
-     * @param  EventHandler $handler the handler to unregister
-     * @return void
+     * @param  string $anEventType the event type to queue
+     * @param  array  $queue       a default queue to initialize
+     * @return HandlerQueue|array
      */
-    public function unregister(EventHandlerInterface $handler)
+    private function initQueue($anEventType = self::EVENT_TYPE_ALL, array $queue = null)
     {
-        foreach ($handler->listHandledEventTypes() as $eventType) {
-            if (isset($this->handlers[$eventType])) {
-                $this->handlers[$eventType]->remove($handler);
-            }
+        if (!isset($this->queues[$anEventType])) {
+            $this->queues[$anEventType] = $queue ?: new HandlerQueue;
         }
-    }
-
-    /**
-     * Get the registered handlers
-     *
-     * @return EventHandler[]
-     */
-    public function listRegisteredHandlers($forEventType = null)
-    {
-        if (isset($forEventType) && isset($this->handlers[$forEventType])) {
-            return $this->handlers[$forEventType]->toArray();
-        }
-        return $this->handlers;
-    }
-
-    /**
-     * Get the valid event types
-     *
-     * @return string[]
-     */
-    public function listValidEventTypes()
-    {
-        return array_keys($this->validEventTypes);
-    }
-
-    /**
-     * Get the enabled event types
-     *
-     * @return string[]
-     */
-    public function listEnabledEventTypes()
-    {
-        return array_keys($this->validEventTypes, true);
-    }
-
-    /**
-     * Get the disabled event types
-     *
-     * @return string[]
-     */
-    public function listDisabledEventTypes()
-    {
-        return array_keys($this->validEventTypes, false);
-    }
-
-    /**
-     * Set the valid event types
-     *
-     * Each event type is stored as an array with the event type as the key and a
-     * boolean enabled flag as the value.
-     *
-     * @param  string[] $validEventTypes
-     * @return void
-     */
-    protected function setValidEventTypes(array $validEventTypes)
-    {
-        foreach ($validEventTypes as $eventType) {
-            $this->validEventTypes[(string) $eventType] = true;
-        }
-    }
-
-    /**
-     * Verifies an event type for validity
-     *
-     * @param  string $eventType the event type to verify
-     * @throws InvalidEventTypeException
-     * @return void
-     */
-    protected function guardValidEventType($eventType)
-    {
-        if (!in_array($eventType, $this->listValidEventTypes())) {
-            throw new InvalidEventTypeException("Invalid event type [$eventType]");
-        }
-    }
-
-    /**
-     * Verifies an event type as enabled
-     *
-     * @param  string $eventType the event type to verify
-     * @throws InvalidEventTypeException
-     * @return void
-     */
-    protected function guardEnabledEventType($eventType)
-    {
-        if (!in_array($eventType, $this->listEnabledEventTypes())) {
-            throw new InvalidEventTypeException("Disabled event type [$eventType]");
-        }
+        return $this->queues[$anEventType];
     }
 }
