@@ -21,41 +21,40 @@ class EventHandlerTraitTest extends TestCase
         $this->assertTrue(trait_exists('Momento\EventHandlerTrait'));
     }
 
-    public function testListHandledEventTypesReturnsArray()
+    public function testValidEventTypesReturnsArray()
     {
-        $subject = new TestEventHandler(['test']);
-        $eventTypes = $subject->listHandledEventTypes();
+        $subject = new TestEventHandler;
+        $eventTypes = $subject->validEventTypes();
         $this->assertInternalType('array', $eventTypes);
-        $this->assertEquals(['test'], $eventTypes);
+        $this->assertEquals([$subject::EVENT_TYPE_TEST], $eventTypes);
     }
 
-    public function testHandlesReturnsBool()
+    public function testValidateEventTypeReturnsBool()
     {
-        $subject = new TestEventHandler(['test']);
-        $this->assertTrue($subject->handles('test'));
-        $this->assertFalse($subject->handles('foo'));
+        $subject = new TestEventHandler;
+        $this->assertFalse($subject::validateEventType('foo'));
     }
 
-    public function testValidateThrowsException()
+    public function testGuardValidEventTypeThrowsException()
     {
         $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
-        $subject = new TestEventHandler(['test']);
-        $event = $this->getMockForAbstractClass('Momento\EventInterface');
-        $event
-            ->expects($this->once())
-            ->method('eventType')
-            ->will($this->returnValue('foo'));
-        $subject->handle($event);
+        $subject = new TestEventHandler;
+        $subject($this->buildEvent('foo'));
     }
 
-    public function testValidatePassesValidEventType()
+    public function testGuardValidEventTypePassesValidEventType()
     {
-        $subject = new TestEventHandler(['test']);
+        $subject = new TestEventHandler;
+        $subject($this->buildEvent($subject::EVENT_TYPE_TEST));
+    }
+
+    private function buildEvent($anEventType)
+    {
         $event = $this->getMockForAbstractClass('Momento\EventInterface');
         $event
             ->expects($this->once())
             ->method('eventType')
-            ->will($this->returnValue('test'));
-        $subject->handle($event);
+            ->will($this->returnValue($anEventType));
+        return $event;
     }
 }

@@ -39,15 +39,14 @@ class HandlerQueue implements Countable, IteratorAggregate
      */
     private $queueOrder = PHP_INT_MAX;
 
-
     /**
      * Prevents duplicates and enforces an expected FIFO queue order
      *
-     * @param  EventHandler $handler  the handler to insert
-     * @param  int          $priority the handler's priority
-     * @throws DuplicateHandlerException - on duplicate handler
+     * @param  callable $handler  the handler to insert
+     * @param  int      $priority the handler's priority
+     * @throws DuplicateHandlerException on duplicate handler
      */
-    public function insert(EventHandlerInterface $handler, $priority = 0)
+    public function insert(callable $handler, $priority = 0)
     {
         if ($this->contains($handler)) {
             throw new DuplicateHandlerException($handler);
@@ -59,9 +58,9 @@ class HandlerQueue implements Countable, IteratorAggregate
     /**
      * Remove a handler and reset the queue
      *
-     * @param EventHandler $handler the handler to remove
+     * @param callable $handler the handler to remove
      */
-    public function remove(EventHandlerInterface $handler)
+    public function remove(callable $handler)
     {
         foreach ($this->handlers as $key => $item) {
             if ($item['handler'] == $handler) {
@@ -74,10 +73,10 @@ class HandlerQueue implements Countable, IteratorAggregate
     /**
      * Is a handler contained?
      *
-     * @param  EventHandler $handler the handler to check
+     * @param  callable $handler the handler to check
      * @return bool
      */
-    public function contains(EventHandlerInterface $handler)
+    public function contains(callable $handler)
     {
         return (in_array($handler, $this->toArray(), true));
     }
