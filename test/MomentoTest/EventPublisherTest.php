@@ -12,151 +12,70 @@ use Momento\EventPublisher;
 use MomentoTest\TestAsset\TestResult;
 
 use PHPUnit_Framework_TestCase as TestCase;
+use Momento\EventInterface;
 
 class EventPublisherTest extends TestCase
 {
-    private $validEventTypes = ['test', 'foo'];
+    const EVENT_TYPE_TEST = 'test';
+    const EVENT_TYPE_FOO  = 'foo';
 
     public function testClassExists()
     {
         $this->assertTrue(class_exists('Momento\EventPublisher'));
     }
 
-    public function testListValidEventTypesReturnsDefinedEventTypes()
-    {
-        $subject = new EventPublisher($this->validEventTypes);
-        $this->assertSame($this->validEventTypes, $subject->listValidEventTypes());
-    }
-
-    public function testListRegisteredHandlersReturnsArray()
-    {
-        $subject = new EventPublisher($this->validEventTypes);
-        $this->assertInternalType('array', $subject->listRegisteredHandlers());
-    }
-
-    public function testRegisterRegistersHandler()
-    {
-        $handler = $this->buildHandler();
-        $subject = new EventPublisher($this->validEventTypes);
-        $subject->register($handler);
-        $this->assertContains($handler, $subject->listRegisteredHandlers('test'));
-    }
-
-    public function testRegisterHandlerWithUnsupportedEventTypeIsRegistered()
-    {
-        $handler = $this->buildHandler(['error', 'test']);
-        $subject = new EventPublisher($this->validEventTypes);
-        $subject->register($handler);
-        $this->assertContains($handler, $subject->listRegisteredHandlers('test'));
-    }
-
     public function testConstructorWithHandlerArray()
     {
-        $handler1 = $this->buildHandler(['foo']);
-        $handler2 = $this->buildHandler();
-        $subject  = new EventPublisher($this->validEventTypes, [
-            ['handler' => $handler1, 'priority' => 1],
-            ['handler' => $handler2, 'priority' => 5],
-        ]);
+        $event    = $this->buildEvent();
 
-        $handlers = $subject->listRegisteredHandlers();
-        $this->assertArrayHasKey('foo', $handlers);
-        $this->assertArrayHasKey('test', $handlers);
-    }
-
-    public function testUnregisterRemovesHandler()
-    {
-        $handler = $this->buildHandler();
-        $subject = new EventPublisher($this->validEventTypes);
-        $subject->register($handler);
-        $subject->unregister($handler);
-        $this->assertNotContains($handler, $subject->listRegisteredHandlers('test'));
-    }
-
-    public function testDisableGuardsForValidEventType()
-    {
-        $subject = new EventPublisher($this->validEventTypes);
-        $this->setExpectedException(
-            'Momento\Exception\InvalidEventTypeException',
-            'Invalid event type [error]'
-        );
-        $subject->disable('error');
-    }
-
-    public function testDisableEventType()
-    {
-        $subject = new EventPublisher($this->validEventTypes);
-        $subject->disable('foo');
-        $this->assertNotContains('foo', $subject->listEnabledEventTypes());
-        $this->assertContains('foo', $subject->listDisabledEventTypes());
-    }
-
-    public function testEnableGuardsForValidEventType()
-    {
-        $subject = new EventPublisher($this->validEventTypes);
-        $this->setExpectedException(
-            'Momento\Exception\InvalidEventTypeException',
-            'Invalid event type [error]'
-        );
-        $subject->enable('error');
-    }
-
-    public function testEnableEventType()
-    {
-        $subject = new EventPublisher($this->validEventTypes);
-        $subject->disable('foo');
-        $subject->enable('foo');
-        $this->assertContains('foo', $subject->listEnabledEventTypes());
-        $this->assertNotContains('foo', $subject->listDisabledEventTypes());
-    }
-
-    public function testPublishDispatchesEventToItsHandlers()
-    {
-        $event = $this->getMockForAbstractClass('Momento\EventInterface');
-        $event
-            ->expects($this->once())
-            ->method('eventType')
-            ->will($this->returnValue('test'));
-
-        $handler1 = $this->buildHandler(['foo']);
+        $handler1 = $this->buildHandler([self::EVENT_TYPE_FOO]);
         $handler1
             ->expects($this->never())
-            ->method('handle');
+            ->method('__invoke');
 
         $handler2 = $this->buildHandler();
         $handler2
             ->expects($this->once())
-            ->method('handle')
+            ->method('__invoke')
             ->with($event);
 
-        $subject = new EventPublisher($this->validEventTypes, [$handler1, $handler2]);
+        $subject  = new EventPublisher([
+            ['handler' => $handler1, 'priority' => 1],
+            ['handler' => $handler2, 'priority' => 5],
+        ]);
+
         $subject->publish($event);
     }
 
-    public function testPublishRequiresEnabledEventType()
+    public function testPublishDispatchesUnknownEventTypeToGenericHandlers()
     {
-        $event = $this->getMockForAbstractClass('Momento\EventInterface');
-        $event
-            ->expects($this->once())
-            ->method('eventType')
-            ->will($this->returnValue('foo'));
+        $event   = $this->buildEvent(self::EVENT_TYPE_FOO);
+        $test    = $this;
+        $handler = function (EventInterface $anEvent) use ($test, $event) {
+            $test->assertSame($event, $anEvent);
+        };
 
-        $subject = new EventPublisher($this->validEventTypes);
-        $subject->disable('foo');
-        $this->setExpectedException(
-            'Momento\Exception\InvalidEventTypeException',
-            'Disabled event type [foo]'
-        );
+        $subject = new EventPublisher([$handler]);
         $subject->publish($event);
     }
 
-    private function buildHandler(array $handledEventTypes = ['test'])
+    private function buildHandler(array $validEventTypes = [self::EVENT_TYPE_TEST])
     {
         $handler = $this->getMockForAbstractClass('Momento\EventHandlerInterface');
         $handler
             ->expects($this->any())
-            ->method('listHandledEventTypes')
-            ->will($this->returnValue($handledEventTypes));
+            ->method('validEventTypes')
+            ->will($this->returnValue($validEventTypes));
         return $handler;
+    }
+
+    private function buildEvent($anEventType = self::EVENT_TYPE_TEST)
+    {
+        $event = $this->getMockForAbstractClass('Momento\EventInterface');
+        $event
+            ->expects($this->any())
+            ->method('eventType')
+            ->will($this->returnValue($anEventType));
+        return $event;
     }
 }
