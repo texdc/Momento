@@ -37,7 +37,7 @@ class DuplicateHandlerException extends InvalidArgumentException
         $code = null,
         SplException $previous = null
     ) {
-        if ($message instanceof EventHandlerInterface) {
+        if (is_callable($message)) {
             $message = sprintf('%s [%s]', static::DEFAULT_MESSAGE, get_class($message));
         }
         parent::__construct($message, $code, $previous);
