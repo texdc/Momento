@@ -8,24 +8,23 @@
 
 namespace Momento;
 
-use Momento\Exception\InvalidEventTypeException;
-
 /**
- * Manages a prioritized set of {@link EventHandlerInterface} instances by event type.
+ * Manages a prioritized set of {@link EventHandlerInterface} instances or callables
+ * by event type.
  *
  * @author George D. Cooksey, III
  */
-class EventPublisher implements EventPublisherInterface
+final class EventPublisher implements EventPublisherInterface
 {
     /**
      * @var string[]
      */
-    protected static $defaultEventTypes = [self::EVENT_TYPE_ALL];
+    private $defaultEventTypes;
 
     /**
      * @var HandlerQueue[]
      */
-    protected $queues = [];
+    private $queues = [];
 
     /**
      * Constructor
@@ -33,14 +32,19 @@ class EventPublisher implements EventPublisherInterface
      * If $handlers is multi-dimensional, the inner array(s) must have two keys,
      * handler and priority.
      *
-     * @param callable[] $handlers the handlers to register
+     * @param callable[] $handlers          the handlers to register
+     * @param string[]   $defaultEventTypes the default event types
      */
-    public function __construct(array $handlers)
+    public function __construct(array $handlers, array $defaultEventTypes = [self::EVENT_TYPE_ALL])
     {
+        $this->defaultEventTypes = $defaultEventTypes;
         foreach ($handlers as $handler) {
             $priority = 0;
             if (is_array($handler)) {
                 extract($handler, EXTR_OVERWRITE);
+            }
+            if (!is_callable($handler) && is_string($handler) && class_exists($handler)) {
+                $handler = $this->buildHandlerProxy($handler);
             }
             $this->register($handler, $priority);
         }
@@ -71,7 +75,7 @@ class EventPublisher implements EventPublisherInterface
     {
         $eventTypes = ($aHandler instanceof EventHandlerInterface)
             ? $aHandler->validEventTypes()
-            : static::$defaultEventTypes;
+            : $this->defaultEventTypes;
 
         foreach ($eventTypes as $eventType) {
             $this->initQueue($eventType)->insert($aHandler, $withPriority);
@@ -91,5 +95,29 @@ class EventPublisher implements EventPublisherInterface
             $this->queues[$anEventType] = $queue ?: new HandlerQueue;
         }
         return $this->queues[$anEventType];
+    }
+
+    /**
+     * Build a handler proxy
+     *
+     * The class name must be an implementation of the {@link EventHandlerInterface},
+     * or implement the '(@link __invoke}' magic method.  It must also not require
+     * any constructor arguments.
+     *
+     * The handler will not be instanciated until needed, and then only once by being
+     * stored in a static variable.
+     *
+     * @param  string $className the handler's classname
+     * @return callable
+     */
+    private function buildHandlerProxy($className)
+    {
+        return function (EventInterface $anEvent) use ($className) {
+            static $handler;
+            if (!isset($handler)) {
+                $handler = new $className;
+            }
+            $handler($anEvent);
+        };
     }
 }
