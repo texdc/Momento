@@ -15,15 +15,12 @@ and some of his [code samples](https://github.com/VaughnVernon).
 ```php
 namespace My\Event;
 
-use Momento\EventHandlerInterface;
-use Momento\EventHandlerTrait;
+use Momento\AbstractEventHandler;
 use Momento\EventInterface;
 
-class Handler implements EventHandlerInterface
+final class Handler extends AbstractEventHandler
 {
-    use EventHandlerTrait;
-    
-    private static $validEventTypes = [
+    protected static $validEventTypes = [
         FooEvent::TYPE,
         BarEvent::TYPE,
     ];

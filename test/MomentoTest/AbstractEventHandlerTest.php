@@ -1,6 +1,6 @@
 <?php
 /**
- * EventHandlerTraitTest.php
+ * AbstractEventHandlerTest.php
  *
  * @copyright 2014 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -12,18 +12,24 @@ use PHPUnit_Framework_TestCase as TestCase;
 use MomentoTest\TestAsset\TestEventHandler;
 
 /**
- * @covers \Momento\EventHandlerTrait
+ * @covers \Momento\AbstractEventHandler
  */
-class EventHandlerTraitTest extends TestCase
+class AbstractEventHandlerTest extends TestCase
 {
-    public function testTraitExists()
+    public function testClassExists()
     {
-        $this->assertTrue(trait_exists('Momento\EventHandlerTrait'));
+        $this->assertTrue(class_exists('Momento\AbstractEventHandler'));
+    }
+
+    public function testInstanceOfEventHandlerInterface()
+    {
+        $subject = $this->getMockForAbstractClass('Momento\AbstractEventHandler');
+        $this->assertInstanceOf('Momento\EventHandlerInterface', $subject);
     }
 
     public function testValidEventTypesReturnsArray()
     {
-        $subject = new TestEventHandler;
+        $subject    = new TestEventHandler;
         $eventTypes = $subject->validEventTypes();
         $this->assertInternalType('array', $eventTypes);
         $this->assertEquals([$subject::EVENT_TYPE_TEST], $eventTypes);
