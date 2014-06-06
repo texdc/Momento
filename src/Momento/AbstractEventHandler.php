@@ -1,6 +1,6 @@
 <?php
 /**
- * EventHandlerTrait.php
+ * AbstractEventHandler.php
  *
  * @copyright 2014 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -15,8 +15,13 @@ use Momento\Exception\InvalidEventTypeException;
  *
  * @author George D. Cooksey, III
  */
-trait EventHandlerTrait
+abstract class AbstractEventHandler implements EventHandlerInterface
 {
+    /**
+     * @var string[]
+     */
+    protected static $validEventTypes = [];
+
     /**
      * List the events that are valid for this handler
      *
@@ -44,7 +49,7 @@ trait EventHandlerTrait
      * @param  string $anEventType the event type to verify
      * @throws InvalidEventTypeException
      */
-    private function guardValidEventType($anEventType)
+    protected function guardValidEventType($anEventType)
     {
         if (!static::validateEventType($anEventType)) {
             throw new InvalidEventTypeException(

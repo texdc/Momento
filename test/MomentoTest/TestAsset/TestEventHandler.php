@@ -8,14 +8,11 @@
 
 namespace MomentoTest\TestAsset;
 
-use Momento\EventHandlerInterface as EventHandler;
-use Momento\EventHandlerTrait;
+use Momento\AbstractEventHandler;
 use Momento\EventInterface as Event;
 
-class TestEventHandler implements EventHandler
+class TestEventHandler extends AbstractEventHandler
 {
-    use EventHandlerTrait;
-
     const EVENT_TYPE_TEST = 'test';
 
     protected static $validEventTypes = [

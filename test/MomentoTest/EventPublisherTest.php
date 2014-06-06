@@ -9,7 +9,6 @@
 namespace MomentoTest;
 
 use Momento\EventPublisher;
-use MomentoTest\TestAsset\TestResult;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Momento\EventInterface;
@@ -44,6 +43,14 @@ class EventPublisherTest extends TestCase
             ['handler' => $handler2, 'priority' => 5],
         ]);
 
+        $subject->publish($event);
+    }
+
+    public function testConstructorBuildsProxyHandlerForClassString()
+    {
+        $subject = new EventPublisher(['MomentoTest\TestAsset\TestEventHandler']);
+        $event   = $this->buildEvent(static::EVENT_TYPE_FOO);
+        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
         $subject->publish($event);
     }
 
