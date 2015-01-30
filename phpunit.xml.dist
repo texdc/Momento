@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://phpunit.de/phpunit.xsd"
-    bootstrap="./test/bootstrap.php" backupGlobals="false" verbose="true" colors="true">
+    bootstrap="./test/config/bootstrap.php" backupGlobals="false" verbose="true" colors="true">
 
     <testsuites>
         <testsuite name="Momento">
-            <directory suffix="Test.php">./test/MomentoTest</directory>
+            <directory suffix="Test.php">./test</directory>
         </testsuite>
     </testsuites>
 
@@ -17,7 +17,7 @@
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/Momento</directory>
+            <directory suffix=".php">./src</directory>
             <exclude>
                 <directory>./vendor</directory>
                 <directory>./test</directory>
