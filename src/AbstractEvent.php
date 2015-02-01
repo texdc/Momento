@@ -67,7 +67,7 @@ abstract class AbstractEvent implements EventInterface
      */
     public function equals(self $other)
     {
-        return $this->eventId->equals($other->eventId);
+        return $this->eventId == $other->eventId;
     }
 
     /**

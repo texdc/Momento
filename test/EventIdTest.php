@@ -13,8 +13,6 @@ use Momento\EventId;
 
 class EventIdTest extends TestCase
 {
-    const EVENT_TYPE = __CLASS__;
-
     /**
      * @var EventId
      */
@@ -22,7 +20,7 @@ class EventIdTest extends TestCase
 
     protected function setUp()
     {
-        $this->eventId = new EventId(static::EVENT_TYPE);
+        $this->eventId = new EventId(__CLASS__);
     }
 
     public function testInstanceOfJsonSerializable()
@@ -37,7 +35,7 @@ class EventIdTest extends TestCase
 
     public function testEventType()
     {
-        $this->assertSame(static::EVENT_TYPE, $this->eventId->eventType());
+        $this->assertSame(__CLASS__, $this->eventId->eventType());
     }
 
     public function testOccurrenceDate()
@@ -56,6 +54,11 @@ class EventIdTest extends TestCase
         $this->assertRegExp($match, (string) $this->eventId);
     }
 
+    public function testFromStringReturnsEventId()
+    {
+        $this->assertEquals($this->eventId, EventId::fromString((string) $this->eventId));
+    }
+
     public function testFromStringThrowsException()
     {
         $this->setExpectedException(
@@ -63,12 +66,6 @@ class EventIdTest extends TestCase
             'Invalid format [test_fail]'
         );
         EventId::fromString('test_fail');
-    }
-
-    public function testEquals()
-    {
-        $id = (string) $this->eventId;
-        $this->assertTrue($this->eventId->equals(EventId::fromString($id)));
     }
 
     public function testJsonSerialize()
@@ -84,6 +81,18 @@ class EventIdTest extends TestCase
     public function testUnserialize()
     {
         $data = serialize($this->eventId);
-        $this->assertTrue($this->eventId->equals(unserialize($data)));
+        $this->assertEquals($this->eventId, unserialize($data));
+    }
+
+    public function testOccurredBeforeReturnsBool()
+    {
+        $id = new EventId(__CLASS__);
+        $this->assertTrue($this->eventId->occurredBefore($id));
+    }
+
+    public function testOccurredAfterReturnsBool()
+    {
+        $id = new EventId(__CLASS__);
+        $this->assertFalse($this->eventId->occurredAfter($id));
     }
 }
