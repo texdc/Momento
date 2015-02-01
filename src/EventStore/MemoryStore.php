@@ -32,8 +32,8 @@ class MemoryStore implements EventStoreInterface
     public function allBetween(EventId $aLowEventId, EventId $aHighEventId)
     {
         return array_filter($this->events, function(EventInterface $anEvent) use ($aLowEventId, $aHighEventId) {
-            $timestamp = $anEvent->eventId()->timestamp();
-            return ($timestamp > $aLowEventId->timestamp() && $timestamp < $aHighEventId->timestamp());
+            $id = $anEvent->eventId();
+            return ($aLowEventId->occurredBefore($id) && $aHighEventId->occurredAfter($id));
         });
     }
 
@@ -44,7 +44,7 @@ class MemoryStore implements EventStoreInterface
     public function allSince(EventId $anEventId)
     {
         return array_filter($this->events, function(EventInterface $anEvent) use ($anEventId) {
-            return $anEvent->eventId()->timestamp() > $anEventId->timestamp();
+            return $anEventId->occurredBefore($anEvent->eventId());
         });
     }
 

@@ -70,6 +70,24 @@ class EventId implements JsonSerializable, Serializable
     }
 
     /**
+     * @param  self $anEventId
+     * @return bool
+     */
+    public function occurredBefore(self $anEventId)
+    {
+        return $this->time < $anEventId->time;
+    }
+
+    /**
+     * @param  self $anEventId
+     * @return bool
+     */
+    public function occurredAfter(self $anEventId)
+    {
+        return $this->time > $anEventId->time;
+    }
+
+    /**
      * @return string
      */
     public function eventType()
@@ -94,30 +112,11 @@ class EventId implements JsonSerializable, Serializable
     }
 
     /**
-     * Compare another id for equality
-     *
-     * @param  EventId $other the other id to compare
-     * @return bool
-     */
-    public function equals(self $other)
-    {
-        return (
-            $this->type    == $other->type
-            && $this->time == $other->time
-            && $this->hash == $other->hash
-        );
-    }
-
-    /**
-     * @return array
+     * @return string
      */
     public function jsonSerialize()
     {
-        return array(
-            'hash' => $this->hash,
-            'time' => $this->time,
-            'type' => $this->type,
-        );
+        return (string) $this;
     }
 
     /**
@@ -134,10 +133,10 @@ class EventId implements JsonSerializable, Serializable
      */
     public function unserialize($serialized)
     {
-        $data = unserialize($serialized);
-        $this->hash = $data['hash'];
-        $this->time = $data['time'];
-        $this->type = $data['type'];
+        $id = static::fromString(unserialize($serialized));
+        $this->hash = $id->hash;
+        $this->time = $id->time;
+        $this->type = $id->type;
     }
 
     /**
