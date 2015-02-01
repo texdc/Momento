@@ -13,22 +13,32 @@ class MemoryStoreTest extends TestCase
         $this->assertTrue(class_exists('Momento\EventStore\MemoryStore'));
     }
 
-    public function testImplementsEventStoreInterface()
+    public function testExtendsAbstractTypeRestrictedStore()
     {
-        $this->assertInstanceOf('Momento\EventStoreInterface', new MemoryStore);
+        $this->assertInstanceOf(
+            'Momento\EventStore\AbstractTypeRestrictedStore',
+            new MemoryStore(__CLASS__)
+        );
     }
 
     public function testAppendAddsEvent()
     {
-        $subject = new MemoryStore;
+        $subject = new MemoryStore(__CLASS__);
         $this->assertCount(0, $subject);
         $subject->append($this->getEvent());
         $this->assertCount(1, $subject);
     }
 
+    public function testAppendValidatesEventType()
+    {
+        $subject = new MemoryStore(__CLASS__);
+        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $subject->append($this->getEvent('foo'));
+    }
+
     public function testAppendRejectsDuplicates()
     {
-        $subject = new MemoryStore;
+        $subject = new MemoryStore(__CLASS__);
         $event = $this->getEvent();
         $subject->append($event);
         $this->setExpectedException('Momento\Exception\AppendingPreventedException');
@@ -39,7 +49,7 @@ class MemoryStoreTest extends TestCase
     {
         $numEvents = 0;
         $anEventId;
-        $subject = new MemoryStore;
+        $subject = new MemoryStore(__CLASS__);
         while ($numEvents <= 5) {
             $event = $this->getEvent();
             if ($numEvents == 2) {
@@ -53,12 +63,19 @@ class MemoryStoreTest extends TestCase
         $this->assertCount(3, $allSince);
     }
 
+    public function testAllSinceValidatesEventType()
+    {
+        $subject = new MemoryStore(__CLASS__);
+        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $subject->allSince(new EventId('foo'));
+    }
+
     public function testAllBetweenReturnsEventArray()
     {
         $numEvents = 0;
         $aLowEventId;
         $aHighEventId;
-        $subject = new MemoryStore;
+        $subject = new MemoryStore(__CLASS__);
         while ($numEvents <= 5) {
             $event = $this->getEvent();
             if ($numEvents == 2) {
@@ -74,16 +91,36 @@ class MemoryStoreTest extends TestCase
         $this->assertCount(1, $allBetween);
     }
 
+    public function testAllBetweenValidatesLowEventType()
+    {
+        $subject = new MemoryStore(__CLASS__);
+        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $subject->allBetween(new EventId('foo'), new EventId(__CLASS__));
+    }
+
+    public function testAllBetweenValidatesHighEventType()
+    {
+        $subject = new MemoryStore(__CLASS__);
+        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $subject->allBetween(new EventId(__CLASS__), new EventId('foo'));
+    }
+
     /**
+     * @param  string $anEventType
      * @return \Momento\EventInterface
      */
-    protected function getEvent()
+    protected function getEvent($anEventType = __CLASS__)
     {
         $event = $this->getMockForAbstractClass('Momento\EventInterface');
         $event
             ->expects($this->any())
             ->method('eventId')
-            ->will($this->returnValue(new EventId(__CLASS__)))
+            ->will($this->returnValue(new EventId($anEventType)))
+        ;
+        $event
+            ->expects($this->any())
+            ->method('eventType')
+            ->will($this->returnValue($anEventType))
         ;
         return $event;
     }

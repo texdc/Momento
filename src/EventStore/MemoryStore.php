@@ -10,7 +10,6 @@ namespace Momento\EventStore;
 
 use Momento\EventId;
 use Momento\EventInterface;
-use Momento\EventStoreInterface;
 use Momento\Exception\AppendingPreventedException;
 
 /**
@@ -18,7 +17,7 @@ use Momento\Exception\AppendingPreventedException;
  *
  * @author George D. Cooksey, III
  */
-class MemoryStore implements EventStoreInterface
+class MemoryStore extends AbstractTypeRestrictedStore
 {
     /**
      * @var EventInterface[]
@@ -27,10 +26,13 @@ class MemoryStore implements EventStoreInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Momento\EventStoreInterface::allBetween()
+     * @see    \Momento\EventStoreInterface::allBetween()
+     * @throws \Momento\Exception\InvalidEventTypeException
      */
     public function allBetween(EventId $aLowEventId, EventId $aHighEventId)
     {
+        $this->guardEventType($aLowEventId->eventType());
+        $this->guardEventType($aHighEventId->eventType());
         return array_filter($this->events, function(EventInterface $anEvent) use ($aLowEventId, $aHighEventId) {
             $id = $anEvent->eventId();
             return ($aLowEventId->occurredBefore($id) && $aHighEventId->occurredAfter($id));
@@ -39,10 +41,12 @@ class MemoryStore implements EventStoreInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Momento\EventStoreInterface::allSince()
+     * @see    \Momento\EventStoreInterface::allSince()
+     * @throws \Momento\Exception\InvalidEventTypeException
      */
     public function allSince(EventId $anEventId)
     {
+        $this->guardEventType($anEventId->eventType());
         return array_filter($this->events, function(EventInterface $anEvent) use ($anEventId) {
             return $anEventId->occurredBefore($anEvent->eventId());
         });
@@ -50,13 +54,16 @@ class MemoryStore implements EventStoreInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Momento\EventStoreInterface::append()
+     * @see    \Momento\EventStoreInterface::append()
+     * @throws \Momento\Exception\InvalidEventTypeException
+     * @throws \Momento\Exception\AppendingPreventedException
      */
     public function append(EventInterface $anEvent)
     {
+        $this->guardEventType($anEvent->eventType());
         $eventId = (string) $anEvent->eventId();
         if (isset($this->events[$eventId])) {
-            throw new AppendingPreventedException("Event cannot be appended [$eventId]");
+            throw new AppendingPreventedException("Duplicate event [$eventId]");
         }
         $this->events[$eventId] = $anEvent;
     }
