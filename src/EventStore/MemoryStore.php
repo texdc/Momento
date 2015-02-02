@@ -11,6 +11,7 @@ namespace Momento\EventStore;
 use Momento\EventId;
 use Momento\EventInterface;
 use Momento\Exception\AppendingPreventedException;
+use Momento\Exception\UnknownEventIdException;
 
 /**
  * Stores {@link EventInterface} instances in memory
@@ -26,10 +27,10 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    \Momento\EventStoreInterface::allBetween()
+     * @see    \Momento\EventStoreInterface::findAllBetween()
      * @throws \Momento\Exception\InvalidEventTypeException
      */
-    public function allBetween(EventId $aLowEventId, EventId $aHighEventId)
+    public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId)
     {
         $this->guardEventType($aLowEventId->eventType());
         $this->guardEventType($aHighEventId->eventType());
@@ -41,15 +42,30 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    \Momento\EventStoreInterface::allSince()
+     * @see    \Momento\EventStoreInterface::findAllSince()
      * @throws \Momento\Exception\InvalidEventTypeException
      */
-    public function allSince(EventId $anEventId)
+    public function findAllSince(EventId $anEventId)
     {
         $this->guardEventType($anEventId->eventType());
         return array_filter($this->events, function(EventInterface $anEvent) use ($anEventId) {
             return $anEventId->occurredBefore($anEvent->eventId());
         });
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see    \Momento\EventStoreInterface::findById()
+     * @throws \Momento\Exception\InvalidEventTypeException
+     * @throws \Momento\Exception\UnknownEventIdException
+     */
+    public function findById(EventId $anEventId)
+    {
+        $this->guardEventType($anEventId->eventType());
+        if (isset($this->events[(string) $anEventId])) {
+            return $this->events[(string) $anEventId];
+        }
+        throw new UnknownEventIdException("Unrecognized event id [$anEventId]");
     }
 
     /**
