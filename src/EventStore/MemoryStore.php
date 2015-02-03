@@ -16,6 +16,8 @@ use Momento\Exception\UnknownEventIdException;
 /**
  * Stores {@link EventInterface} instances in memory
  *
+ * Can be used as an in-memory cache for other event store implementations
+ *
  * @author George D. Cooksey, III
  */
 class MemoryStore extends AbstractTypeRestrictedStore

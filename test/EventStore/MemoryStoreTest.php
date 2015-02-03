@@ -1,4 +1,10 @@
 <?php
+/**
+ * MemoryStoreTest.php
+ *
+ * @copyright 2015 George D. Cooksey, III
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ */
 
 namespace MomentoTest\EventStore;
 
