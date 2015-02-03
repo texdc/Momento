@@ -10,9 +10,6 @@ namespace Momento;
 
 use Countable;
 
-use Momento\Exception\AppendingPreventedException;
-use Momento\Exception\RemovalPreventedException;
-
 /**
  * Stores {@link EventInterface} instances
  *
@@ -27,7 +24,7 @@ interface EventStoreInterface extends Countable
      * @param  EventId $aHighEventId
      * @return EventInterface[]
      */
-    public function allBetween(EventId $aLowEventId, EventId $aHighEventId);
+    public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId);
 
     /**
      * Find all the events which occurred after a given id
@@ -35,13 +32,22 @@ interface EventStoreInterface extends Countable
      * @param  EventId $anEventId
      * @return EventInterface[]
      */
-    public function allSince(EventId $anEventId);
+    public function findAllSince(EventId $anEventId);
+
+    /**
+     * Find an event by a given id
+     *
+     * @param  EventId $anEventId
+     * @return EventInterface
+     * @throws \Momento\Exception\UnknownEventIdException
+     */
+    public function findById(EventId $anEventId);
 
     /**
      * Append an event
      *
      * @param  EventInterface $anEvent
-     * @throws AppendingPreventedException - when the event cannot be appended
+     * @throws \Momento\Exception\AppendingPreventedException
      */
     public function append(EventInterface $anEvent);
 }

@@ -14,14 +14,19 @@ use Momento\EventStore\AbstractTypeRestrictedStore;
 
 class TypeRestrictedStoreAsset extends AbstractTypeRestrictedStore
 {
-    public function allBetween(EventId $aLowEventId, EventId $aHighEventId)
+    public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId)
     {
         // ...
     }
 
-    public function allSince(EventId $anEventId)
+    public function findAllSince(EventId $anEventId)
     {
         $this->guardEventType($anEventId->eventType());
+    }
+
+    public function findById(EventId $anEventId)
+    {
+        // ...
     }
 
     public function append(EventInterface $anEvent)

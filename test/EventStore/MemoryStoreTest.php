@@ -1,4 +1,10 @@
 <?php
+/**
+ * MemoryStoreTest.php
+ *
+ * @copyright 2015 George D. Cooksey, III
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ */
 
 namespace MomentoTest\EventStore;
 
@@ -45,10 +51,10 @@ class MemoryStoreTest extends TestCase
         $subject->append($event);
     }
 
-    public function testAllSinceReturnsEventArray()
+    public function testFindAllSinceReturnsEventArray()
     {
         $numEvents = 0;
-        $anEventId;
+        $anEventId = null;
         $subject = new MemoryStore(__CLASS__);
         while ($numEvents <= 5) {
             $event = $this->getEvent();
@@ -58,23 +64,23 @@ class MemoryStoreTest extends TestCase
             $subject->append($event);
             $numEvents++;
         }
-        $allSince = $subject->allSince($anEventId);
-        $this->assertInternalType('array', $allSince);
-        $this->assertCount(3, $allSince);
+        $findAllSince = $subject->findAllSince($anEventId);
+        $this->assertInternalType('array', $findAllSince);
+        $this->assertCount(3, $findAllSince);
     }
 
-    public function testAllSinceValidatesEventType()
+    public function testFindAllSinceValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
         $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
-        $subject->allSince(new EventId('foo'));
+        $subject->findAllSince(new EventId('foo'));
     }
 
-    public function testAllBetweenReturnsEventArray()
+    public function testFindAllBetweenReturnsEventArray()
     {
-        $numEvents = 0;
-        $aLowEventId;
-        $aHighEventId;
+        $numEvents    = 0;
+        $aLowEventId  = null;
+        $aHighEventId = null;
         $subject = new MemoryStore(__CLASS__);
         while ($numEvents <= 5) {
             $event = $this->getEvent();
@@ -86,23 +92,45 @@ class MemoryStoreTest extends TestCase
             $subject->append($event);
             $numEvents++;
         }
-        $allBetween = $subject->allBetween($aLowEventId, $aHighEventId);
-        $this->assertInternalType('array', $allBetween);
-        $this->assertCount(1, $allBetween);
+        $findAllBetween = $subject->findAllBetween($aLowEventId, $aHighEventId);
+        $this->assertInternalType('array', $findAllBetween);
+        $this->assertCount(1, $findAllBetween);
     }
 
-    public function testAllBetweenValidatesLowEventType()
+    public function testFindAllBetweenValidatesLowEventType()
     {
         $subject = new MemoryStore(__CLASS__);
         $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
-        $subject->allBetween(new EventId('foo'), new EventId(__CLASS__));
+        $subject->findAllBetween(new EventId('foo'), new EventId(__CLASS__));
     }
 
-    public function testAllBetweenValidatesHighEventType()
+    public function testFindAllBetweenValidatesHighEventType()
     {
         $subject = new MemoryStore(__CLASS__);
         $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
-        $subject->allBetween(new EventId(__CLASS__), new EventId('foo'));
+        $subject->findAllBetween(new EventId(__CLASS__), new EventId('foo'));
+    }
+
+    public function testFindByIdValidatesEventType()
+    {
+        $subject = new MemoryStore(__CLASS__);
+        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $subject->findById(new EventId('foo'));
+    }
+
+    public function testFindByIdReturnsEventInterface()
+    {
+        $subject = new MemoryStore(__CLASS__);
+        $event   = $this->getEvent();
+        $subject->append($event);
+        $this->assertSame($event, $subject->findById($event->eventId()));
+    }
+
+    public function testFindByIdThrowsUnknownEventIdException()
+    {
+        $subject = new MemoryStore(__CLASS__);
+        $this->setExpectedException('Momento\Exception\UnknownEventIdException');
+        $subject->findById(new EventId(__CLASS__));
     }
 
     /**
