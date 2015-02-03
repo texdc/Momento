@@ -54,7 +54,7 @@ class MemoryStoreTest extends TestCase
     public function testFindAllSinceReturnsEventArray()
     {
         $numEvents = 0;
-        $anEventId;
+        $anEventId = null;
         $subject = new MemoryStore(__CLASS__);
         while ($numEvents <= 5) {
             $event = $this->getEvent();
@@ -78,9 +78,9 @@ class MemoryStoreTest extends TestCase
 
     public function testFindAllBetweenReturnsEventArray()
     {
-        $numEvents = 0;
-        $aLowEventId;
-        $aHighEventId;
+        $numEvents    = 0;
+        $aLowEventId  = null;
+        $aHighEventId = null;
         $subject = new MemoryStore(__CLASS__);
         while ($numEvents <= 5) {
             $event = $this->getEvent();
