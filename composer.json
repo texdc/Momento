@@ -5,7 +5,7 @@
     "keywords": ["ddd", "domain event"],
     "license": "MIT",
     "require": {
-        "php": "~5.4",
+        "php": "~5.4 || ~7.0",
         "mathiasverraes/classfunctions": "@stable"
     },
     "require-dev": {
