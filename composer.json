@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "~5.4",
-        "mathiasverraes/classfunctions": "~1.0"
+        "mathiasverraes/classfunctions": "@stable"
     },
     "require-dev": {
         "phpunit/phpunit": "@stable",
