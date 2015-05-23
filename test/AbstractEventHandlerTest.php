@@ -35,20 +35,20 @@ class AbstractEventHandlerTest extends TestCase
         $this->assertEquals([$subject::EVENT_TYPE_TEST], $eventTypes);
     }
 
-    public function testValidateEventTypeReturnsBool()
+    public function testAcceptsEventTypeReturnsBool()
     {
         $subject = new TestEventHandler;
-        $this->assertFalse($subject::validateEventType('foo'));
+        $this->assertFalse($subject->acceptsEventType('foo'));
     }
 
-    public function testGuardValidEventTypeThrowsException()
+    public function testGuardEventTypeThrowsException()
     {
         $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
         $subject = new TestEventHandler;
         $subject($this->buildEvent('foo'));
     }
 
-    public function testGuardValidEventTypePassesValidEventType()
+    public function testGuardEventTypePassesValidEventType()
     {
         $subject = new TestEventHandler;
         $subject($this->buildEvent($subject::EVENT_TYPE_TEST));

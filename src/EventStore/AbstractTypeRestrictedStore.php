@@ -9,13 +9,15 @@
 namespace Momento\EventStore;
 
 use Momento\Exception\InvalidEventTypeException;
+use Momento\EventStoreInterface;
+use Momento\LimitsEventTypesInterface;
 
 /**
  * Allows stores to restrict event ids and instances by their event type
  *
  * @author George D. Cooksey, III
  */
-abstract class AbstractTypeRestrictedStore implements TypeRestrictedStoreInterface
+abstract class AbstractTypeRestrictedStore implements EventStoreInterface, LimitsEventTypesInterface
 {
     /**
      * @var string
@@ -31,10 +33,10 @@ abstract class AbstractTypeRestrictedStore implements TypeRestrictedStoreInterfa
     }
 
     /**
-     * @param  string $anEventType
-     * @return bool
+     * (non-PHPdoc)
+     * @see \Momento\LimitsEventTypesInterface::acceptsEventType()
      */
-    public function isValidEventType($anEventType)
+    public function acceptsEventType($anEventType)
     {
         return $this->validEventType == (string) $anEventType;
     }
@@ -45,7 +47,7 @@ abstract class AbstractTypeRestrictedStore implements TypeRestrictedStoreInterfa
      */
     protected function guardEventType($anEventType)
     {
-        if (!$this->isValidEventType($anEventType)) {
+        if (!$this->acceptsEventType($anEventType)) {
             throw new InvalidEventTypeException("Unrecognized event type [$anEventType]");
         }
     }

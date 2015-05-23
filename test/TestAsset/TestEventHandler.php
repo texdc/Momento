@@ -10,6 +10,7 @@ namespace MomentoTest\TestAsset;
 
 use Momento\AbstractEventHandler;
 use Momento\EventInterface as Event;
+use Momento\EventPublisherInterface;
 
 class TestEventHandler extends AbstractEventHandler
 {
@@ -21,6 +22,11 @@ class TestEventHandler extends AbstractEventHandler
 
     public function __invoke(Event $anEvent)
     {
-        $this->guardValidEventType($anEvent->eventType());
+        $this->guardEventType($anEvent->eventType());
+    }
+
+    public function registerTo(EventPublisherInterface $aPublisher)
+    {
+        $aPublisher->register($this, static::$validEventTypes);
     }
 }

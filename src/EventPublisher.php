@@ -71,7 +71,7 @@ final class EventPublisher implements EventPublisherInterface
      * @param callable $aHandler     the handler to register
      * @param int      $withPriority the handler's priority
      */
-    private function register(callable $aHandler, $withPriority = 0)
+    public function register(callable $aHandler, $withPriority = 0)
     {
         $eventTypes = ($aHandler instanceof EventHandlerInterface)
             ? $aHandler->validEventTypes()
@@ -104,8 +104,8 @@ final class EventPublisher implements EventPublisherInterface
      * or implement the '(@link __invoke}' magic method.  It must also not require
      * any constructor arguments.
      *
-     * The handler will not be instanciated until needed, and then only once by being
-     * stored in a static variable.
+     * The handler will be lazy-loaded, and then only once by being stored in a
+     * static variable.
      *
      * @param  string $className the handler's classname
      * @return callable

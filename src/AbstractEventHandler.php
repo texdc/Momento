@@ -33,12 +33,10 @@ abstract class AbstractEventHandler implements EventHandlerInterface
     }
 
     /**
-     * Verify a handled event type
-     *
-     * @param  string $anEventType the event type to verify
-     * @return bool
+     * (non-PHPdoc)
+     * @see \Momento\LimitsEventTypesInterface::acceptsEventType()
      */
-    public static function validateEventType($anEventType)
+    public function acceptsEventType($anEventType)
     {
         return in_array($anEventType, static::$validEventTypes);
     }
@@ -49,12 +47,10 @@ abstract class AbstractEventHandler implements EventHandlerInterface
      * @param  string $anEventType the event type to verify
      * @throws InvalidEventTypeException
      */
-    protected function guardValidEventType($anEventType)
+    protected function guardEventType($anEventType)
     {
-        if (!static::validateEventType($anEventType)) {
-            throw new InvalidEventTypeException(
-                "$anEventType is not a valid event type"
-            );
+        if (!$this->acceptsEventType($anEventType)) {
+            throw new InvalidEventTypeException("$anEventType is not a valid event type");
         }
     }
 }

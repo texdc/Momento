@@ -23,7 +23,16 @@ interface EventPublisherInterface
     /**
      * Publish an event
      *
-     * @param EventInterface $anEvent the event to publish
+     * @param  EventInterface $anEvent
+     * @return void
      */
     public function publish(EventInterface $anEvent);
+
+    /**
+     * Register an event handler
+     *
+     * @param  callable $aHandler
+     * @return void
+     */
+    public function register(callable $aHandler);
 }

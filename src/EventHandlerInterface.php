@@ -14,7 +14,7 @@ namespace Momento;
  *
  * @author George D. Cooksey, III
  */
-interface EventHandlerInterface
+interface EventHandlerInterface extends LimitsEventTypesInterface
 {
     /**
      * Process or delegate an {@link EventInterface}
@@ -31,10 +31,10 @@ interface EventHandlerInterface
     public function validEventTypes();
 
     /**
-     * Verify a handled event type
+     * Register this handler to an event publisher
      *
-     * @param  string $anEventType the event type to verify
-     * @return bool
+     * @param  EventPublisherInterface $aPublisher
+     * @return void
      */
-    public static function validateEventType($anEventType);
+    public function registerTo(EventPublisherInterface $aPublisher);
 }

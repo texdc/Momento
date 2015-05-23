@@ -21,16 +21,22 @@ class AbstractTypeRestrictedStoreTest extends TestCase
         $this->assertTrue(class_exists(static::CLASSNAME));
     }
 
-    public function testClassImplementsTypeRestricedStoreInterface()
+    public function testClassImplementsEventStoreInterface()
     {
         $subject = $this->getMockForAbstractClass(static::CLASSNAME, [__CLASS__]);
-        $this->assertInstanceOf('Momento\EventStore\TypeRestrictedStoreInterface', $subject);
+        $this->assertInstanceOf('Momento\EventStoreInterface', $subject);
     }
 
-    public function testIsValidEventTypeReturnsBool()
+    public function testClassImplementsLimitsEventTypesInterface()
+    {
+        $subject = $this->getMockForAbstractClass(static::CLASSNAME, [__CLASS__]);
+        $this->assertInstanceOf('Momento\LimitsEventTypesInterface', $subject);
+    }
+
+    public function testAcceptsEventTypeReturnsBool()
     {
         $subject = new TypeRestrictedStoreAsset(__CLASS__);
-        $this->assertFalse($subject->isValidEventType('foo'));
+        $this->assertFalse($subject->acceptsEventType('foo'));
     }
 
     public function testGuardValidTypeThrowsInvalidEventTypeException()
