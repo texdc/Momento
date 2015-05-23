@@ -38,7 +38,10 @@ class MemoryStoreTest extends TestCase
     public function testAppendValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException(
+            'Momento\Exception\InvalidEventTypeException',
+            'Unrecognized event type [foo]'
+        );
         $subject->append($this->getEvent('foo'));
     }
 
@@ -72,7 +75,10 @@ class MemoryStoreTest extends TestCase
     public function testFindAllSinceValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException(
+            'Momento\Exception\InvalidEventTypeException',
+            'Unrecognized event type [foo]'
+        );
         $subject->findAllSince(new EventId('foo'));
     }
 
@@ -100,21 +106,30 @@ class MemoryStoreTest extends TestCase
     public function testFindAllBetweenValidatesLowEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException(
+            'Momento\Exception\InvalidEventTypeException',
+            'Unrecognized event type [foo]'
+        );
         $subject->findAllBetween(new EventId('foo'), new EventId(__CLASS__));
     }
 
     public function testFindAllBetweenValidatesHighEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException(
+            'Momento\Exception\InvalidEventTypeException',
+            'Unrecognized event type [foo]'
+        );
         $subject->findAllBetween(new EventId(__CLASS__), new EventId('foo'));
     }
 
     public function testFindByIdValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException(
+            'Momento\Exception\InvalidEventTypeException',
+            'Unrecognized event type [foo]'
+        );
         $subject->findById(new EventId('foo'));
     }
 

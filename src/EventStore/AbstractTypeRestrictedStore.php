@@ -48,7 +48,7 @@ abstract class AbstractTypeRestrictedStore implements EventStoreInterface, Limit
     protected function guardEventType($anEventType)
     {
         if (!$this->acceptsEventType($anEventType)) {
-            throw new InvalidEventTypeException("Unrecognized event type [$anEventType]");
+            throw new InvalidEventTypeException($anEventType);
         }
     }
 }

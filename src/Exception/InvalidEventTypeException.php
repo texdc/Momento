@@ -8,6 +8,7 @@
 
 namespace Momento\Exception;
 
+use Exception;
 use InvalidArgumentException;
 
 /**
@@ -18,4 +19,15 @@ use InvalidArgumentException;
  */
 class InvalidEventTypeException extends InvalidArgumentException
 {
+    /**
+     * Constructor
+     *
+     * @param string    $anEventType the invalid event type
+     * @param int       $code        (optional) an error code
+     * @param Exception $previous    (optional) a previous exception
+     */
+    public function __construct($anEventType, $code = null, Exception $previous = null)
+    {
+        parent::__construct("Unrecognized event type [$anEventType]", $code, $previous);
+    }
 }

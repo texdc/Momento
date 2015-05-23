@@ -43,7 +43,10 @@ class AbstractTypeRestrictedStoreTest extends TestCase
     {
         $subject = new TypeRestrictedStoreAsset(__CLASS__);
         $subject->findAllSince(new EventId(__CLASS__));
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException(
+            'Momento\Exception\InvalidEventTypeException',
+            'Unrecognized event type [foo]'
+        );
         $subject->findAllSince(new EventId('foo'));
     }
 }
