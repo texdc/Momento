@@ -6,7 +6,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento;
+namespace texdc\momento;
 
 /**
  * Manages a prioritized set of {@link EventHandlerInterface} instances or callables

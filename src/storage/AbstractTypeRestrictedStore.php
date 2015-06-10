@@ -6,9 +6,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento\EventStore;
+namespace texdc\momento\storage;
 
-use Momento\Exception\InvalidEventTypeException;
+use texdc\momento\exception\InvalidEventTypeException;
 
 /**
  * Allows stores to restrict event ids and instances by their event type

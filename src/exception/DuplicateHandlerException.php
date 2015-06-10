@@ -6,16 +6,16 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento\Exception;
+namespace texdc\momento\exception;
 
 use Exception as SplException;
 use InvalidArgumentException;
-use Momento\EventHandlerInterface;
+use texdc\momento\EventHandlerInterface;
 
 /**
  * Announces a duplicate handler
  *
- * @see    \Momento\HandlerQueue::insert()
+ * @see    texdc\momento\HandlerQueue::insert()
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 class DuplicateHandlerException extends InvalidArgumentException

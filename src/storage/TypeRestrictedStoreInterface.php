@@ -6,9 +6,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento\EventStore;
+namespace texdc\momento\storage;
 
-use Momento\EventStoreInterface;
+use texdc\momento\EventStoreInterface;
 
 /**
  * Allows stores to restict event ids and instances by their event type.

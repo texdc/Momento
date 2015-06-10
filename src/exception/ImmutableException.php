@@ -6,14 +6,14 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento\Exception;
+namespace texdc\momento\exception;
 
 use ErrorException;
 
 /**
  * Announces a mutation violation
  *
- * @see    \Momento\EventResult::__set()
+ * @see    texdc\momento\EventResult::__set()
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 class ImmutableException extends ErrorException

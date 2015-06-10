@@ -6,7 +6,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento;
+namespace texdc\momento;
 
 use Verraes\ClassFunctions\ClassFunctions;
 
@@ -34,7 +34,7 @@ abstract class AbstractEvent implements EventInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Momento\EventInterface::eventId()
+     * @see texdc\momento\EventInterface::eventId()
      */
     public function eventId()
     {
@@ -43,7 +43,7 @@ abstract class AbstractEvent implements EventInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Momento\EventInterface::occurrenceDate()
+     * @see texdc\momento\EventInterface::occurrenceDate()
      */
     public function occurrenceDate()
     {
@@ -52,7 +52,7 @@ abstract class AbstractEvent implements EventInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Momento\EventInterface::eventType()
+     * @see texdc\momento\EventInterface::eventType()
      */
     public function eventType()
     {

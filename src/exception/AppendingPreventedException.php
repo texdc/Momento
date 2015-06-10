@@ -6,14 +6,14 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento\Exception;
+namespace texdc\momento\exception;
 
 use RuntimeException;
 
 /**
  * Announces that appending an event to an event store has been prevented
  *
- * @see    \Momento\EventStore::append()
+ * @see    texdc\momento\storage::append()
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 class AppendingPreventedException extends RuntimeException

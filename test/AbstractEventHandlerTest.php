@@ -6,30 +6,30 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace MomentoTest;
+namespace texdc\momento\test;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use MomentoTest\TestAsset\TestEventHandler;
+use texdc\momento\test\asset\EventHandler;
 
 /**
- * @covers \Momento\AbstractEventHandler
+ * @covers texdc\momento\AbstractEventHandler
  */
 class AbstractEventHandlerTest extends TestCase
 {
     public function testClassExists()
     {
-        $this->assertTrue(class_exists('Momento\AbstractEventHandler'));
+        $this->assertTrue(class_exists('texdc\momento\AbstractEventHandler'));
     }
 
     public function testInstanceOfEventHandlerInterface()
     {
-        $subject = $this->getMockForAbstractClass('Momento\AbstractEventHandler');
-        $this->assertInstanceOf('Momento\EventHandlerInterface', $subject);
+        $subject = $this->getMockForAbstractClass('texdc\momento\AbstractEventHandler');
+        $this->assertInstanceOf('texdc\momento\EventHandlerInterface', $subject);
     }
 
     public function testValidEventTypesReturnsArray()
     {
-        $subject    = new TestEventHandler;
+        $subject    = new EventHandler;
         $eventTypes = $subject->validEventTypes();
         $this->assertInternalType('array', $eventTypes);
         $this->assertEquals([$subject::EVENT_TYPE_TEST], $eventTypes);
@@ -37,26 +37,26 @@ class AbstractEventHandlerTest extends TestCase
 
     public function testValidateEventTypeReturnsBool()
     {
-        $subject = new TestEventHandler;
+        $subject = new EventHandler;
         $this->assertFalse($subject::validateEventType('foo'));
     }
 
     public function testGuardValidEventTypeThrowsException()
     {
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
-        $subject = new TestEventHandler;
+        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $subject = new EventHandler;
         $subject($this->buildEvent('foo'));
     }
 
     public function testGuardValidEventTypePassesValidEventType()
     {
-        $subject = new TestEventHandler;
+        $subject = new EventHandler;
         $subject($this->buildEvent($subject::EVENT_TYPE_TEST));
     }
 
     private function buildEvent($anEventType)
     {
-        $event = $this->getMockForAbstractClass('Momento\EventInterface');
+        $event = $this->getMockForAbstractClass('texdc\momento\EventInterface');
         $event
             ->expects($this->once())
             ->method('eventType')

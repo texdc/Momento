@@ -6,14 +6,14 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento\Exception;
+namespace texdc\momento\exception;
 
 use InvalidArgumentException;
 
 /**
  * Announces an invalid event type
  *
- * @see    \Momento\EventPublisher::guardValidEventType()
+ * @see    texdc\momento\EventPublisher::guardValidEventType()
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 class InvalidEventTypeException extends InvalidArgumentException

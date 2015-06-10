@@ -6,32 +6,32 @@
  * @copyright 2015 George D. Cooksey, III
  */
 
-namespace MomentoTest;
+namespace texdc\momento\test;
 
 use PHPUnit_Framework_TestCase as TestCase;
 
 class AbstractEventTest extends TestCase
 {
     /**
-     * @var \Momento\AbstractEvent
+     * @var texdc\momento\AbstractEvent
      */
     private $event;
 
     protected function setUp()
     {
-        $this->event = $this->getMockForAbstractClass('Momento\AbstractEvent');
+        $this->event = $this->getMockForAbstractClass('texdc\momento\AbstractEvent');
     }
 
     public function testEventId()
     {
-        $this->assertInstanceOf('Momento\EventId', $this->event->eventId());
+        $this->assertInstanceOf('texdc\momento\EventId', $this->event->eventId());
     }
 
     public function testSetEventIdThrowsException()
     {
         $this->setExpectedException('InvalidArgumentException', 'Invalid event type [test]');
-        $eventId = $this->getMock('Momento\EventId', null, array('test'));
-        $event   = $this->getMockForAbstractClass('Momento\AbstractEvent', array($eventId));
+        $eventId = $this->getMock('texdc\momento\EventId', null, array('test'));
+        $event   = $this->getMockForAbstractClass('texdc\momento\AbstractEvent', array($eventId));
     }
 
     public function testOccurrenceDateReturnsDateTime()
@@ -46,7 +46,7 @@ class AbstractEventTest extends TestCase
 
     public function testEqualsComparesEventId()
     {
-        $other = $this->getMockForAbstractClass('Momento\AbstractEvent');
+        $other = $this->getMockForAbstractClass('texdc\momento\AbstractEvent');
         $this->assertFalse($this->event->equals($other));
     }
 }

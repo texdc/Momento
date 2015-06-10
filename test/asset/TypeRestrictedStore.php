@@ -1,18 +1,18 @@
 <?php
 /**
- * TypeRestrictedStoreAsset.php
+ * TypeRestrictedStore.php
  *
  * @copyright 2015 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace MomentoTest\TestAsset;
+namespace texdc\momento\test\asset;
 
-use Momento\EventId;
-use Momento\EventInterface;
-use Momento\EventStore\AbstractTypeRestrictedStore;
+use texdc\momento\EventId;
+use texdc\momento\EventInterface;
+use texdc\momento\storage\AbstractTypeRestrictedStore;
 
-class TypeRestrictedStoreAsset extends AbstractTypeRestrictedStore
+class TypeRestrictedStore extends AbstractTypeRestrictedStore
 {
     public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId)
     {

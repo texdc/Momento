@@ -6,23 +6,23 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace MomentoTest\EventStore;
+namespace texdc\momento\test\storage;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use Momento\EventStore\MemoryStore;
-use Momento\EventId;
+use texdc\momento\storage\MemoryStore;
+use texdc\momento\EventId;
 
 class MemoryStoreTest extends TestCase
 {
     public function testClassExists()
     {
-        $this->assertTrue(class_exists('Momento\EventStore\MemoryStore'));
+        $this->assertTrue(class_exists('texdc\momento\storage\MemoryStore'));
     }
 
     public function testExtendsAbstractTypeRestrictedStore()
     {
         $this->assertInstanceOf(
-            'Momento\EventStore\AbstractTypeRestrictedStore',
+            'texdc\momento\storage\AbstractTypeRestrictedStore',
             new MemoryStore(__CLASS__)
         );
     }
@@ -38,7 +38,7 @@ class MemoryStoreTest extends TestCase
     public function testAppendValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
         $subject->append($this->getEvent('foo'));
     }
 
@@ -47,7 +47,7 @@ class MemoryStoreTest extends TestCase
         $subject = new MemoryStore(__CLASS__);
         $event = $this->getEvent();
         $subject->append($event);
-        $this->setExpectedException('Momento\Exception\AppendingPreventedException');
+        $this->setExpectedException('texdc\momento\exception\AppendingPreventedException');
         $subject->append($event);
     }
 
@@ -72,7 +72,7 @@ class MemoryStoreTest extends TestCase
     public function testFindAllSinceValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
         $subject->findAllSince(new EventId('foo'));
     }
 
@@ -100,21 +100,21 @@ class MemoryStoreTest extends TestCase
     public function testFindAllBetweenValidatesLowEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
         $subject->findAllBetween(new EventId('foo'), new EventId(__CLASS__));
     }
 
     public function testFindAllBetweenValidatesHighEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
         $subject->findAllBetween(new EventId(__CLASS__), new EventId('foo'));
     }
 
     public function testFindByIdValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
         $subject->findById(new EventId('foo'));
     }
 
@@ -129,17 +129,17 @@ class MemoryStoreTest extends TestCase
     public function testFindByIdThrowsUnknownEventIdException()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('Momento\Exception\UnknownEventIdException');
+        $this->setExpectedException('texdc\momento\exception\UnknownEventIdException');
         $subject->findById(new EventId(__CLASS__));
     }
 
     /**
      * @param  string $anEventType
-     * @return \Momento\EventInterface
+     * @return texdc\momento\EventInterface
      */
     protected function getEvent($anEventType = __CLASS__)
     {
-        $event = $this->getMockForAbstractClass('Momento\EventInterface');
+        $event = $this->getMockForAbstractClass('texdc\momento\EventInterface');
         $event
             ->expects($this->any())
             ->method('eventId')
