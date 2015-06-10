@@ -13,7 +13,7 @@ use InvalidArgumentException;
 /**
  * Announces an unknown event id
  *
- * @see    texdc\momento\storageInterface::findById()
+ * @see    texdc\momento\EventStoreInterface::findById()
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 class UnknownEventIdException extends InvalidArgumentException

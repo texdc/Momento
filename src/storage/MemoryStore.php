@@ -29,7 +29,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    texdc\momento\storageInterface::findAllBetween()
+     * @see    texdc\momento\EventStoreInterface::findAllBetween()
      * @throws texdc\momento\exception\InvalidEventTypeException
      */
     public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId)
@@ -44,7 +44,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    texdc\momento\storageInterface::findAllSince()
+     * @see    texdc\momento\EventStoreInterface::findAllSince()
      * @throws texdc\momento\exception\InvalidEventTypeException
      */
     public function findAllSince(EventId $anEventId)
@@ -57,7 +57,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    texdc\momento\storageInterface::findById()
+     * @see    texdc\momento\EventStoreInterface::findById()
      * @throws texdc\momento\exception\InvalidEventTypeException
      * @throws texdc\momento\exception\UnknownEventIdException
      */
@@ -72,7 +72,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    texdc\momento\storageInterface::append()
+     * @see    texdc\momento\EventStoreInterface::append()
      * @throws texdc\momento\exception\InvalidEventTypeException
      * @throws texdc\momento\exception\AppendingPreventedException
      */
