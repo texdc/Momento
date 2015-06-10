@@ -15,8 +15,8 @@ and some of his [code samples](https://github.com/VaughnVernon).
 ```php
 namespace My\Event;
 
-use Momento\AbstractEventHandler;
-use Momento\EventInterface;
+use texdc\momento\AbstractEventHandler;
+use texdc\momento\EventInterface;
 
 final class Handler extends AbstractEventHandler
 {
@@ -29,7 +29,7 @@ final class Handler extends AbstractEventHandler
     {
         $type = $anEvent->eventType();
         $this->guardValidEventType($type);
-        $this->{$type}($anEvent);
+        call_user_func([$this, $type], $anEvent);
     }
     
     // ...
