@@ -1,21 +1,21 @@
 <?php
 /**
- * InvalidEventTypeException.php
+ * UnknownEventIdException.php
  *
  * @copyright 2015 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento\Exception;
+namespace texdc\momento\exception;
 
 use InvalidArgumentException;
 
 /**
- * Announces an invalid event type
+ * Announces an unknown event id
  *
- * @see    \Momento\EventPublisher::guardValidEventType()
+ * @see    texdc\momento\storageInterface::findById()
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
-class InvalidEventTypeException extends InvalidArgumentException
+class UnknownEventIdException extends InvalidArgumentException
 {
 }

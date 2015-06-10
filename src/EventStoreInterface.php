@@ -6,7 +6,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento;
+namespace texdc\momento;
 
 use Countable;
 
@@ -39,7 +39,7 @@ interface EventStoreInterface extends Countable
      *
      * @param  EventId $anEventId
      * @return EventInterface
-     * @throws \Momento\Exception\UnknownEventIdException
+     * @throws texdc\momento\exception\UnknownEventIdException
      */
     public function findById(EventId $anEventId);
 
@@ -47,7 +47,7 @@ interface EventStoreInterface extends Countable
      * Append an event
      *
      * @param  EventInterface $anEvent
-     * @throws \Momento\Exception\AppendingPreventedException
+     * @throws texdc\momento\exception\AppendingPreventedException
      */
     public function append(EventInterface $anEvent);
 }

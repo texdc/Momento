@@ -6,14 +6,14 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento\Exception;
+namespace texdc\momento\exception;
 
 use ErrorException;
 
 /**
  * Announces an invalid property
  *
- * @see    \Momento\EventResult::__get()
+ * @see    texdc\momento\EventResult::__get()
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 class InvalidPropertyException extends ErrorException

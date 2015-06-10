@@ -6,12 +6,12 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento\EventStore;
+namespace texdc\momento\storage;
 
-use Momento\EventId;
-use Momento\EventInterface;
-use Momento\Exception\AppendingPreventedException;
-use Momento\Exception\UnknownEventIdException;
+use texdc\momento\EventId;
+use texdc\momento\EventInterface;
+use texdc\momento\exception\AppendingPreventedException;
+use texdc\momento\exception\UnknownEventIdException;
 
 /**
  * Stores {@link EventInterface} instances in memory
@@ -29,8 +29,8 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    \Momento\EventStoreInterface::findAllBetween()
-     * @throws \Momento\Exception\InvalidEventTypeException
+     * @see    texdc\momento\storageInterface::findAllBetween()
+     * @throws texdc\momento\exception\InvalidEventTypeException
      */
     public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId)
     {
@@ -44,8 +44,8 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    \Momento\EventStoreInterface::findAllSince()
-     * @throws \Momento\Exception\InvalidEventTypeException
+     * @see    texdc\momento\storageInterface::findAllSince()
+     * @throws texdc\momento\exception\InvalidEventTypeException
      */
     public function findAllSince(EventId $anEventId)
     {
@@ -57,9 +57,9 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    \Momento\EventStoreInterface::findById()
-     * @throws \Momento\Exception\InvalidEventTypeException
-     * @throws \Momento\Exception\UnknownEventIdException
+     * @see    texdc\momento\storageInterface::findById()
+     * @throws texdc\momento\exception\InvalidEventTypeException
+     * @throws texdc\momento\exception\UnknownEventIdException
      */
     public function findById(EventId $anEventId)
     {
@@ -72,9 +72,9 @@ class MemoryStore extends AbstractTypeRestrictedStore
 
     /**
      * (non-PHPdoc)
-     * @see    \Momento\EventStoreInterface::append()
-     * @throws \Momento\Exception\InvalidEventTypeException
-     * @throws \Momento\Exception\AppendingPreventedException
+     * @see    texdc\momento\storageInterface::append()
+     * @throws texdc\momento\exception\InvalidEventTypeException
+     * @throws texdc\momento\exception\AppendingPreventedException
      */
     public function append(EventInterface $anEvent)
     {

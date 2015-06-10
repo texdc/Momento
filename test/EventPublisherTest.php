@@ -6,12 +6,12 @@
  * @copyright 2015 George D. Cooksey, III
  */
 
-namespace MomentoTest;
+namespace texdc\momento\test;
 
-use Momento\EventPublisher;
+use texdc\momento\EventPublisher;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use Momento\EventInterface;
+use texdc\momento\EventInterface;
 
 class EventPublisherTest extends TestCase
 {
@@ -20,7 +20,7 @@ class EventPublisherTest extends TestCase
 
     public function testClassExists()
     {
-        $this->assertTrue(class_exists('Momento\EventPublisher'));
+        $this->assertTrue(class_exists('texdc\momento\EventPublisher'));
     }
 
     public function testConstructorWithHandlerArray()
@@ -48,9 +48,9 @@ class EventPublisherTest extends TestCase
 
     public function testConstructorBuildsProxyHandlerForClassString()
     {
-        $subject = new EventPublisher(['MomentoTest\TestAsset\TestEventHandler']);
+        $subject = new EventPublisher(['texdc\momento\test\asset\EventHandler']);
         $event   = $this->buildEvent(static::EVENT_TYPE_FOO);
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
         $subject->publish($event);
     }
 
@@ -68,7 +68,7 @@ class EventPublisherTest extends TestCase
 
     private function buildHandler(array $validEventTypes = [self::EVENT_TYPE_TEST])
     {
-        $handler = $this->getMockForAbstractClass('Momento\EventHandlerInterface');
+        $handler = $this->getMockForAbstractClass('texdc\momento\EventHandlerInterface');
         $handler
             ->expects($this->any())
             ->method('validEventTypes')
@@ -78,7 +78,7 @@ class EventPublisherTest extends TestCase
 
     private function buildEvent($anEventType = self::EVENT_TYPE_TEST)
     {
-        $event = $this->getMockForAbstractClass('Momento\EventInterface');
+        $event = $this->getMockForAbstractClass('texdc\momento\EventInterface');
         $event
             ->expects($this->any())
             ->method('eventType')

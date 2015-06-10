@@ -6,15 +6,15 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace MomentoTest\EventStore;
+namespace texdc\momento\test\storage;
 
-use Momento\EventId;
-use MomentoTest\TestAsset\TypeRestrictedStoreAsset;
+use texdc\momento\EventId;
+use texdc\momento\test\asset\TypeRestrictedStore;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class AbstractTypeRestrictedStoreTest extends TestCase
 {
-    const CLASSNAME = 'Momento\EventStore\AbstractTypeRestrictedStore';
+    const CLASSNAME = 'texdc\momento\storage\AbstractTypeRestrictedStore';
 
     public function testClassExists()
     {
@@ -24,20 +24,20 @@ class AbstractTypeRestrictedStoreTest extends TestCase
     public function testClassImplementsTypeRestricedStoreInterface()
     {
         $subject = $this->getMockForAbstractClass(static::CLASSNAME, [__CLASS__]);
-        $this->assertInstanceOf('Momento\EventStore\TypeRestrictedStoreInterface', $subject);
+        $this->assertInstanceOf('texdc\momento\storage\TypeRestrictedStoreInterface', $subject);
     }
 
     public function testIsValidEventTypeReturnsBool()
     {
-        $subject = new TypeRestrictedStoreAsset(__CLASS__);
+        $subject = new TypeRestrictedStore(__CLASS__);
         $this->assertFalse($subject->isValidEventType('foo'));
     }
 
     public function testGuardValidTypeThrowsInvalidEventTypeException()
     {
-        $subject = new TypeRestrictedStoreAsset(__CLASS__);
+        $subject = new TypeRestrictedStore(__CLASS__);
         $subject->findAllSince(new EventId(__CLASS__));
-        $this->setExpectedException('Momento\Exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
         $subject->findAllSince(new EventId('foo'));
     }
 }

@@ -6,9 +6,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento;
+namespace texdc\momento;
 
-use Momento\Exception\InvalidEventTypeException;
+use texdc\momento\exception\InvalidEventTypeException;
 
 /**
  * A basic implementation of the {@link EventHandlerInteface}

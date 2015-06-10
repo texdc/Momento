@@ -1,17 +1,17 @@
 <?php
 /**
- * TestEventHandler.php
+ * EventHandler.php
  *
  * @copyright 2015 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace MomentoTest\TestAsset;
+namespace texdc\momento\test\asset;
 
-use Momento\AbstractEventHandler;
-use Momento\EventInterface as Event;
+use texdc\momento\AbstractEventHandler;
+use texdc\momento\EventInterface as Event;
 
-class TestEventHandler extends AbstractEventHandler
+class EventHandler extends AbstractEventHandler
 {
     const EVENT_TYPE_TEST = 'test';
 

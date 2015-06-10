@@ -6,13 +6,13 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace Momento;
+namespace texdc\momento;
 
 use Countable;
 use IteratorAggregate;
 use SplPriorityQueue;
 
-use Momento\Exception\DuplicateHandlerException;
+use texdc\momento\exception\DuplicateHandlerException;
 
 /**
  * A reusable, prioritized queue for {@link EventHandlerInterface} instances

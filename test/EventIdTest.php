@@ -6,10 +6,10 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace MomentoTest;
+namespace texdc\momento\test;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use Momento\EventId;
+use texdc\momento\EventId;
 
 class EventIdTest extends TestCase
 {

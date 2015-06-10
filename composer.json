@@ -16,12 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Momento\\": "src/"
+            "texdc\\momento\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MomentoTest\\": "test/"
+            "texdc\\momento\\test\\": "test/"
         }
     }
 }
