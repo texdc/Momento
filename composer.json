@@ -1,27 +1,27 @@
 {
     "name": "texdc/momento",
-    "description": "A common set of domain event tools",
+    "description": "A library for domain events",
     "type": "library",
     "keywords": ["ddd", "domain event"],
     "license": "MIT",
     "require": {
         "php": "~5.4 || ~7.0",
-        "mathiasverraes/classfunctions": "@stable"
+        "mathiasverraes/classfunctions": "~1.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "@stable",
-        "phpmd/phpmd": "@stable",
-        "squizlabs/php_codesniffer": "@stable",
-        "satooshi/php-coveralls": "~0.6"
+        "phpunit/phpunit": "~4.0"
     },
     "autoload": {
-        "psr-4": {
-            "texdc\\momento\\": "src/"
-        }
+        "psr-4": { "texdc\\momento\\": "src/" }
     },
     "autoload-dev": {
-        "psr-4": {
-            "texdc\\momento\\test\\": "test/"
-        }
+        "psr-4": { "texdc\\momento\\test\\": "test/" }
+    },
+    "config": {
+        "platform": { "php": "5.4" },
+        "preferred-install": "dist"
+    },
+    "archive": {
+        "exclude": ["/test", "/build", "/.*", "/phpunit.xml.dist"]
     }
 }

@@ -19,8 +19,3 @@ before_script:
 script:
   - mkdir -p build/logs
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-#  - vendor/bin/phpcs --standard=PSR2 src/ test/
-
-after_script:
-  - sh .travis.coverage.sh
-  - vendor/bin/phpmd src/ text cleancode,codesize,controversial,design,naming,unusedcode
