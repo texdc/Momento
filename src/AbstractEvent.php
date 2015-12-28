@@ -8,6 +8,7 @@
 
 namespace texdc\momento;
 
+use texdc\momento\exception\EventException;
 use function Verraes\ClassFunctions\underscore;
 
 /**
@@ -63,13 +64,13 @@ abstract class AbstractEvent implements EventInterface
      * Set the event id
      *
      * @param  EventId $eventId the event id
-     * @throws \InvalidArgumentException - on event type mismatch
+     * @throws EventException - on event type mismatch
      */
     private function setEventId(EventId $eventId)
     {
         $eventType = $eventId->eventType();
         if ($eventType != underscore($this)) {
-            throw new \InvalidArgumentException("Invalid event type [$eventType]");
+            throw EventException::invalidType($eventType);
         }
         $this->eventId = $eventId;
     }

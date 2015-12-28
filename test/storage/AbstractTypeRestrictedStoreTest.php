@@ -33,11 +33,11 @@ class AbstractTypeRestrictedStoreTest extends TestCase
         $this->assertFalse($subject->isValidEventType('foo'));
     }
 
-    public function testGuardValidTypeThrowsInvalidEventTypeException()
+    public function testGuardValidTypeThrowsEventException()
     {
         $subject = new TypeRestrictedStore(__CLASS__);
         $subject->findAllSince(new EventId(__CLASS__));
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\EventException');
         $subject->findAllSince(new EventId('foo'));
     }
 }

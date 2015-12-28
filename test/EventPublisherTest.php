@@ -50,7 +50,7 @@ class EventPublisherTest extends TestCase
     {
         $subject = new EventPublisher(['texdc\momento\test\asset\EventHandler']);
         $event   = $this->buildEvent(static::EVENT_TYPE_FOO);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\EventException');
         $subject->publish($event);
     }
 

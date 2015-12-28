@@ -29,7 +29,7 @@ class AbstractEventTest extends TestCase
 
     public function testSetEventIdThrowsException()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Invalid event type [test]');
+        $this->setExpectedException('texdc\momento\exception\EventException', 'Invalid event type [test]');
         $eventId = $this->getMock('texdc\momento\EventId', null, array('test'));
         $event   = $this->getMockForAbstractClass('texdc\momento\AbstractEvent', array($eventId));
     }

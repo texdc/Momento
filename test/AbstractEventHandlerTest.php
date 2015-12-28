@@ -43,7 +43,7 @@ class AbstractEventHandlerTest extends TestCase
 
     public function testGuardValidEventTypeThrowsException()
     {
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\EventException');
         $subject = new EventHandler;
         $subject($this->buildEvent('foo'));
     }

@@ -14,6 +14,8 @@ use texdc\momento\EventId;
 
 class MemoryStoreTest extends TestCase
 {
+    const EVENT_EXCEPTION = 'texdc\momento\exception\EventException';
+
     public function testClassExists()
     {
         $this->assertTrue(class_exists('texdc\momento\storage\MemoryStore'));
@@ -38,7 +40,7 @@ class MemoryStoreTest extends TestCase
     public function testAppendValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->append($this->getEvent('foo'));
     }
 
@@ -72,7 +74,7 @@ class MemoryStoreTest extends TestCase
     public function testFindAllSinceValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->findAllSince(new EventId('foo'));
     }
 
@@ -100,21 +102,21 @@ class MemoryStoreTest extends TestCase
     public function testFindAllBetweenValidatesLowEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->findAllBetween(new EventId('foo'), new EventId(__CLASS__));
     }
 
     public function testFindAllBetweenValidatesHighEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->findAllBetween(new EventId(__CLASS__), new EventId('foo'));
     }
 
     public function testFindByIdValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->findById(new EventId('foo'));
     }
 
