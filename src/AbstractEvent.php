@@ -60,17 +60,6 @@ abstract class AbstractEvent implements EventInterface
     }
 
     /**
-     * Compare another event for equality
-     *
-     * @param  AbstractEvent $other the other event to compare
-     * @return bool
-     */
-    public function equals(self $other)
-    {
-        return $this->eventId == $other->eventId;
-    }
-
-    /**
      * Set the event id
      *
      * @param  EventId $eventId the event id

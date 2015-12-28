@@ -43,10 +43,4 @@ class AbstractEventTest extends TestCase
     {
         $this->assertInternalType('string', $this->event->eventType());
     }
-
-    public function testEqualsComparesEventId()
-    {
-        $other = $this->getMockForAbstractClass('texdc\momento\AbstractEvent');
-        $this->assertFalse($this->event->equals($other));
-    }
 }
