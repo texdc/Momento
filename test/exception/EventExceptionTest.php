@@ -1,6 +1,6 @@
 <?php
 /**
- * AbstractEventTest.php
+ * EventExceptionTest.php
  *
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright 2015 George D. Cooksey, III
