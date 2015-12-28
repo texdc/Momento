@@ -8,7 +8,7 @@
 
 namespace texdc\momento;
 
-use Verraes\ClassFunctions\ClassFunctions;
+use function Verraes\ClassFunctions\underscore;
 
 /**
  * A base implementation of the {@link EventInterface}
@@ -29,7 +29,7 @@ abstract class AbstractEvent implements EventInterface
      */
     public function __construct(EventId $eventId = null)
     {
-        $this->setEventId($eventId ?: new EventId(ClassFunctions::underscore($this)));
+        $this->setEventId($eventId ?: new EventId(underscore($this)));
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class AbstractEvent implements EventInterface
     private function setEventId(EventId $eventId)
     {
         $eventType = $eventId->eventType();
-        if ($eventType != ClassFunctions::underscore($this)) {
+        if ($eventType != underscore($this)) {
             throw new \InvalidArgumentException("Invalid event type [$eventType]");
         }
         $this->eventId = $eventId;
