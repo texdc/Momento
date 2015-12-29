@@ -12,7 +12,7 @@ use Countable;
 use IteratorAggregate;
 use SplPriorityQueue;
 
-use texdc\momento\exception\DuplicateHandlerException;
+use texdc\momento\exception\HandlerException;
 
 /**
  * A reusable, prioritized queue for {@link EventHandlerInterface} instances
@@ -49,7 +49,7 @@ class HandlerQueue implements Countable, IteratorAggregate
     public function insert(callable $handler, $priority = 0)
     {
         if ($this->contains($handler)) {
-            throw new DuplicateHandlerException($handler);
+            throw HandlerException::duplicate($handler);
         }
         $priority = [(int) $priority, $this->queueOrder--];
         $this->handlers[] = compact('handler', 'priority');

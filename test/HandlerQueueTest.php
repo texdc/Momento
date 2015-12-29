@@ -39,10 +39,7 @@ class HandlerQueueTest extends TestCase
         $subject = new HandlerQueue;
         $handler = $this->getMockForAbstractClass('texdc\momento\EventHandlerInterface');
         $subject->insert($handler);
-        $this->setExpectedException(
-            'texdc\momento\exception\DuplicateHandlerException',
-            sprintf('Duplicate handler [%s]', get_class($handler))
-        );
+        $this->setExpectedException('texdc\momento\exception\HandlerException');
         $subject->insert($handler, 2);
     }
 
