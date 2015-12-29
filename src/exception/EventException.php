@@ -9,6 +9,7 @@
 namespace texdc\momento\exception;
 
 use DomainException;
+use Exception;
 
 /**
  * Announces an event exception
@@ -16,14 +17,24 @@ use DomainException;
  * @see    texdc\momento\EventPublisher::guardValidEventType()
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
-class EventException extends DomainException
+final class EventException extends DomainException
 {
+    /**#@+
+     * Exception code constants
+     * @var int
+     */
+    const CODE_INVALID_TYPE = 11;
+    /**#@- */
+
     /**
-     * @param  string $anEventType
+     * Announces an invalid event type
+     *
+     * @param  string    $anEventType an event type
+     * @param  Exception $anException a previous exception
      * @return self
      */
-    public static function invalidType($anEventType)
+    public static function invalidType($anEventType, Exception $anException = null)
     {
-        return new static("Invalid event type [$anEventType]");
+        return new static("Invalid event type [$anEventType]", static::CODE_INVALID_TYPE, $anException);
     }
 }

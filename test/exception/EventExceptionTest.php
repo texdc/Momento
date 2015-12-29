@@ -22,5 +22,6 @@ class EventExceptionTest extends TestCase
     {
         $subject = EventException::invalidType('foo');
         $this->assertEquals('Invalid event type [foo]', $subject->getMessage());
+        $this->assertEquals(EventException::CODE_INVALID_TYPE, $subject->getCode());
     }
 }
