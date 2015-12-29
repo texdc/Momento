@@ -10,8 +10,7 @@ namespace texdc\momento\storage;
 
 use texdc\momento\EventId;
 use texdc\momento\EventInterface;
-use texdc\momento\exception\AppendingPreventedException;
-use texdc\momento\exception\UnknownEventIdException;
+use texdc\momento\exception\StorageException;
 
 /**
  * Stores {@link EventInterface} instances in memory
@@ -67,7 +66,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
         if (isset($this->events[(string) $anEventId])) {
             return $this->events[(string) $anEventId];
         }
-        throw new UnknownEventIdException("Unrecognized event id [$anEventId]");
+        throw StorageException::unknownEventId($anEventId);
     }
 
     /**
@@ -81,7 +80,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
         $this->guardEventType($anEvent->eventType());
         $eventId = (string) $anEvent->eventId();
         if (isset($this->events[$eventId])) {
-            throw new AppendingPreventedException("Duplicate event [$eventId]");
+            throw StorageException::duplicateEvent($eventId);
         }
         $this->events[$eventId] = $anEvent;
     }
