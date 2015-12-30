@@ -14,7 +14,6 @@ use Exception;
 /**
  * Announces an event exception
  *
- * @see    texdc\momento\EventPublisher::guardValidEventType()
  * @author George D. Cooksey, III <texdc3@gmail.com>
  */
 final class EventException extends DomainException
@@ -24,6 +23,7 @@ final class EventException extends DomainException
      * @var int
      */
     const CODE_INVALID_TYPE = 11;
+    const CODE_INVALID_ID   = 12;
     /**#@- */
 
     /**
@@ -36,5 +36,17 @@ final class EventException extends DomainException
     public static function invalidType($anEventType, Exception $anException = null)
     {
         return new static("Invalid event type [$anEventType]", static::CODE_INVALID_TYPE, $anException);
+    }
+
+    /**
+     * Announces an invalid id format
+     *
+     * @param  string    $anEventId   an event id
+     * @param  Exception $anException a previous exception
+     * @return self
+     */
+    public static function invalidId($anEventId, Exception $anException = null)
+    {
+        return new static("Invalid id format [$anEventId]", static::CODE_INVALID_ID, $anException);
     }
 }

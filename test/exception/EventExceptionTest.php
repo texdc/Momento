@@ -18,10 +18,17 @@ class EventExceptionTest extends TestCase
         $this->assertInstanceOf('DomainException', new EventException());
     }
 
-    public function testInvalidTypeMessage()
+    public function testInvalidType()
     {
         $subject = EventException::invalidType('foo');
         $this->assertEquals('Invalid event type [foo]', $subject->getMessage());
         $this->assertEquals(EventException::CODE_INVALID_TYPE, $subject->getCode());
+    }
+
+    public function testInvalidId()
+    {
+        $subject = EventException::invalidId('foo');
+        $this->assertEquals('Invalid id format [foo]', $subject->getMessage());
+        $this->assertEquals(EventException::CODE_INVALID_ID, $subject->getCode());
     }
 }

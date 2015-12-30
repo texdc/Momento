@@ -12,6 +12,7 @@ use DateTime;
 use InvalidArgumentException;
 use Serializable;
 use JsonSerializable;
+use texdc\momento\exception\EventException;
 
 /**
  * Provides a rich identity for events that encapsulates the event type and timestamp
@@ -59,7 +60,7 @@ class EventId implements JsonSerializable, Serializable
     {
         $parts = explode('_', $eventId);
         if (count($parts) != 3) {
-            throw new InvalidArgumentException("Invalid format [$eventId]");
+            throw EventException::invalidId($eventId);
         }
 
         $id       = new static($parts[0]);

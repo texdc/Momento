@@ -62,8 +62,8 @@ class EventIdTest extends TestCase
     public function testFromStringThrowsException()
     {
         $this->setExpectedException(
-            'InvalidArgumentException',
-            'Invalid format [test_fail]'
+            'texdc\momento\exception\EventException',
+            'Invalid id format [test_fail]'
         );
         EventId::fromString('test_fail');
     }
