@@ -14,7 +14,7 @@ use Exception;
 /**
  * Announces an event exception
  *
- * @author George D. Cooksey, III <texdc3@gmail.com>
+ * @author George D. Cooksey, III
  */
 final class EventException extends DomainException
 {

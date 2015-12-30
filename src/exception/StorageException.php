@@ -14,7 +14,7 @@ use Exception;
 /**
  * Announces event storage exceptions
  *
- * @author George D. Cooksey, III <texdc3@gmail.com>
+ * @author George D. Cooksey, III
  */
 final class StorageException extends DomainException
 {
