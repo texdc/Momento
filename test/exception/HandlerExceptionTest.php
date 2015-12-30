@@ -20,8 +20,12 @@ class HandlerExceptionTest extends TestCase
 
     public function testDuplicate()
     {
-        $subject = HandlerException::duplicate(function () {});
-        $this->assertEquals('Duplicate handler [Closure]', $subject->getMessage());
+        $handler = function () {};
+        $subject = HandlerException::duplicate($handler);
+        $this->assertEquals(
+            sprintf('Duplicate handler [%s]', get_class($handler)),
+            $subject->getMessage()
+        );
         $this->assertEquals(HandlerException::CODE_DUPLICATE, $subject->getCode());
     }
 }
