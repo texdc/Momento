@@ -2,7 +2,7 @@
 /**
  * AbstractEventHandlerTest.php
  *
- * @copyright 2015 George D. Cooksey, III
+ * @copyright 2016 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -43,7 +43,7 @@ class AbstractEventHandlerTest extends TestCase
 
     public function testGuardValidEventTypeThrowsException()
     {
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException('texdc\momento\exception\EventException');
         $subject = new EventHandler;
         $subject($this->buildEvent('foo'));
     }

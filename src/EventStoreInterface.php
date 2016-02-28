@@ -2,7 +2,7 @@
 /**
  * EventStoreInterface.php
  *
- * @copyright 2015 George D. Cooksey, III
+ * @copyright 2016 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -39,7 +39,7 @@ interface EventStoreInterface extends Countable
      *
      * @param  EventId $anEventId
      * @return EventInterface
-     * @throws texdc\momento\exception\UnknownEventIdException
+     * @throws texdc\momento\exception\StorageException
      */
     public function findById(EventId $anEventId);
 
@@ -47,7 +47,7 @@ interface EventStoreInterface extends Countable
      * Append an event
      *
      * @param  EventInterface $anEvent
-     * @throws texdc\momento\exception\AppendingPreventedException
+     * @throws texdc\momento\exception\StorageException
      */
     public function append(EventInterface $anEvent);
 }

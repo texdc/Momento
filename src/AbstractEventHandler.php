@@ -2,13 +2,13 @@
 /**
  * AbstractEventHandler.php
  *
- * @copyright 2015 George D. Cooksey, III
+ * @copyright 2016 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
 namespace texdc\momento;
 
-use texdc\momento\exception\InvalidEventTypeException;
+use texdc\momento\exception\EventException;
 
 /**
  * A basic implementation of the {@link EventHandlerInteface}
@@ -47,14 +47,12 @@ abstract class AbstractEventHandler implements EventHandlerInterface
      * Protects against invalid event types
      *
      * @param  string $anEventType the event type to verify
-     * @throws InvalidEventTypeException
+     * @throws EventException - on invalid event type
      */
     protected function guardValidEventType($anEventType)
     {
         if (!static::validateEventType($anEventType)) {
-            throw new InvalidEventTypeException(
-                "$anEventType is not a valid event type"
-            );
+            throw EventException::invalidType($anEventType);
         }
     }
 }

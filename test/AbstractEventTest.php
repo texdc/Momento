@@ -3,7 +3,7 @@
  * AbstractEventTest.php
  *
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @copyright 2015 George D. Cooksey, III
+ * @copyright 2016 George D. Cooksey, III
  */
 
 namespace texdc\momento\test;
@@ -29,7 +29,7 @@ class AbstractEventTest extends TestCase
 
     public function testSetEventIdThrowsException()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Invalid event type [test]');
+        $this->setExpectedException('texdc\momento\exception\EventException', 'Invalid event type [test]');
         $eventId = $this->getMock('texdc\momento\EventId', null, array('test'));
         $event   = $this->getMockForAbstractClass('texdc\momento\AbstractEvent', array($eventId));
     }
@@ -42,11 +42,5 @@ class AbstractEventTest extends TestCase
     public function testEventTypeReturnsString()
     {
         $this->assertInternalType('string', $this->event->eventType());
-    }
-
-    public function testEqualsComparesEventId()
-    {
-        $other = $this->getMockForAbstractClass('texdc\momento\AbstractEvent');
-        $this->assertFalse($this->event->equals($other));
     }
 }

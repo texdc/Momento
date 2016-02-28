@@ -2,13 +2,13 @@
 /**
  * AbstractTypeRestrictedStore.php
  *
- * @copyright 2015 George D. Cooksey, III
+ * @copyright 2016 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
 namespace texdc\momento\storage;
 
-use texdc\momento\exception\InvalidEventTypeException;
+use texdc\momento\exception\EventException;
 
 /**
  * Allows stores to restrict event ids and instances by their event type
@@ -46,7 +46,7 @@ abstract class AbstractTypeRestrictedStore implements TypeRestrictedStoreInterfa
     protected function guardEventType($anEventType)
     {
         if (!$this->isValidEventType($anEventType)) {
-            throw new InvalidEventTypeException("Unrecognized event type [$anEventType]");
+            throw EventException::invalidType($anEventType);
         }
     }
 }

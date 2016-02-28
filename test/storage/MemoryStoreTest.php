@@ -2,7 +2,7 @@
 /**
  * MemoryStoreTest.php
  *
- * @copyright 2015 George D. Cooksey, III
+ * @copyright 2016 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -14,6 +14,9 @@ use texdc\momento\EventId;
 
 class MemoryStoreTest extends TestCase
 {
+    const EVENT_EXCEPTION   = 'texdc\momento\exception\EventException';
+    const STORAGE_EXCEPTION = 'texdc\momento\exception\StorageException';
+
     public function testClassExists()
     {
         $this->assertTrue(class_exists('texdc\momento\storage\MemoryStore'));
@@ -38,7 +41,7 @@ class MemoryStoreTest extends TestCase
     public function testAppendValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->append($this->getEvent('foo'));
     }
 
@@ -47,7 +50,7 @@ class MemoryStoreTest extends TestCase
         $subject = new MemoryStore(__CLASS__);
         $event = $this->getEvent();
         $subject->append($event);
-        $this->setExpectedException('texdc\momento\exception\AppendingPreventedException');
+        $this->setExpectedException(static::STORAGE_EXCEPTION);
         $subject->append($event);
     }
 
@@ -72,7 +75,7 @@ class MemoryStoreTest extends TestCase
     public function testFindAllSinceValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->findAllSince(new EventId('foo'));
     }
 
@@ -100,21 +103,21 @@ class MemoryStoreTest extends TestCase
     public function testFindAllBetweenValidatesLowEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->findAllBetween(new EventId('foo'), new EventId(__CLASS__));
     }
 
     public function testFindAllBetweenValidatesHighEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->findAllBetween(new EventId(__CLASS__), new EventId('foo'));
     }
 
     public function testFindByIdValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\InvalidEventTypeException');
+        $this->setExpectedException(self::EVENT_EXCEPTION);
         $subject->findById(new EventId('foo'));
     }
 
@@ -129,7 +132,7 @@ class MemoryStoreTest extends TestCase
     public function testFindByIdThrowsUnknownEventIdException()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException('texdc\momento\exception\UnknownEventIdException');
+        $this->setExpectedException(static::STORAGE_EXCEPTION);
         $subject->findById(new EventId(__CLASS__));
     }
 

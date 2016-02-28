@@ -2,7 +2,7 @@
 /**
  * HandlerQueueTest.php
  *
- * @copyright 2015 George D. Cooksey, III
+ * @copyright 2016 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -39,10 +39,7 @@ class HandlerQueueTest extends TestCase
         $subject = new HandlerQueue;
         $handler = $this->getMockForAbstractClass('texdc\momento\EventHandlerInterface');
         $subject->insert($handler);
-        $this->setExpectedException(
-            'texdc\momento\exception\DuplicateHandlerException',
-            sprintf('Duplicate handler [%s]', get_class($handler))
-        );
+        $this->setExpectedException('texdc\momento\exception\HandlerException');
         $subject->insert($handler, 2);
     }
 
