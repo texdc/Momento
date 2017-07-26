@@ -5,11 +5,11 @@
     "keywords": ["ddd", "domain event"],
     "license": "MIT",
     "require": {
-        "php": "~5.6 || ~7.0",
+        "php": "^5.6 || ^7.0",
         "mathiasverraes/classfunctions": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.0"
+        "phpunit/phpunit": "^6.0"
     },
     "autoload": {
         "psr-4": { "texdc\\momento\\": "src/" }
