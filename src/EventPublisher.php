@@ -55,7 +55,7 @@ final class EventPublisher implements EventPublisherInterface
      *
      * @param Event $anEvent the event to publish
      */
-    public function publish(EventInterface $anEvent) : void
+    public function publish(EventInterface $anEvent)
     {
         foreach ($this->initQueue($anEvent->eventType(), []) as $handler) {
             $handler($anEvent);
@@ -71,7 +71,7 @@ final class EventPublisher implements EventPublisherInterface
      * @param callable $aHandler     the handler to register
      * @param int      $withPriority the handler's priority
      */
-    private function register(callable $aHandler, int $withPriority = 0) : void
+    private function register(callable $aHandler, int $withPriority = 0)
     {
         $eventTypes = ($aHandler instanceof EventHandlerInterface)
             ? $aHandler->validEventTypes()

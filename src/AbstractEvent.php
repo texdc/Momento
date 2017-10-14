@@ -68,7 +68,7 @@ abstract class AbstractEvent implements EventInterface
      * @param  EventId $eventId the event id
      * @throws EventException - on event type mismatch
      */
-    private function setEventId(EventId $eventId) : void
+    private function setEventId(EventId $eventId)
     {
         $eventType = $eventId->eventType();
         if ($eventType != ClassFunctions::underscore($this)) {

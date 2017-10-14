@@ -49,7 +49,7 @@ abstract class AbstractEventHandler implements EventHandlerInterface
      * @param  string $anEventType the event type to verify
      * @throws EventException - on invalid event type
      */
-    protected function guardValidEventType(string $anEventType) : void
+    protected function guardValidEventType(string $anEventType)
     {
         if (!static::validateEventType($anEventType)) {
             throw EventException::invalidType($anEventType);

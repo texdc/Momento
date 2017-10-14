@@ -49,5 +49,5 @@ interface EventStoreInterface extends Countable
      * @param  EventInterface $anEvent
      * @throws texdc\momento\exception\StorageException
      */
-    public function record(EventInterface $anEvent) : void;
+    public function record(EventInterface $anEvent);
 }

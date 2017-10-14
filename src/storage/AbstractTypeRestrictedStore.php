@@ -43,7 +43,7 @@ abstract class AbstractTypeRestrictedStore implements TypeRestrictedStoreInterfa
      * @param  string $anEventType
      * @throws InvalidEventTypeException
      */
-    protected function guardEventType(string $anEventType) : void
+    protected function guardEventType(string $anEventType)
     {
         if (!$this->isValidEventType($anEventType)) {
             throw EventException::invalidType($anEventType);

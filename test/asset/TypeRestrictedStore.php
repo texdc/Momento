@@ -34,7 +34,7 @@ class TypeRestrictedStore extends AbstractTypeRestrictedStore
         return null;
     }
 
-    public function record(EventInterface $anEvent) : void
+    public function record(EventInterface $anEvent)
     {
         // ...
     }

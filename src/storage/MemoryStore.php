@@ -75,7 +75,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
      * @throws texdc\momento\exception\InvalidEventTypeException
      * @throws texdc\momento\exception\AppendingPreventedException
      */
-    public function record(EventInterface $anEvent) : void
+    public function record(EventInterface $anEvent)
     {
         $this->guardEventType($anEvent->eventType());
         $eventId = (string) $anEvent->eventId();
