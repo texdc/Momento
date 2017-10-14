@@ -2,7 +2,7 @@
 /**
  * AbstractTypeRestrictedStoreTest.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
