@@ -3,12 +3,12 @@
  * StorageExceptionTest.php
  *
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  */
 
 namespace texdc\momento\test;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use texdc\momento\exception\StorageException;
 
 class StorageExceptionTest extends TestCase

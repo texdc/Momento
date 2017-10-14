@@ -2,7 +2,7 @@
 /**
  * EventHandlerInterface.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -28,7 +28,7 @@ interface EventHandlerInterface
      *
      * @return string[]
      */
-    public function validEventTypes();
+    public function validEventTypes() : array;
 
     /**
      * Verify a handled event type
@@ -36,5 +36,5 @@ interface EventHandlerInterface
      * @param  string $anEventType the event type to verify
      * @return bool
      */
-    public static function validateEventType($anEventType);
+    public static function validateEventType(string $anEventType) : bool;
 }

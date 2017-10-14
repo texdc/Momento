@@ -2,7 +2,7 @@
 /**
  * AbstractTypeRestrictedStoreTest.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -10,7 +10,7 @@ namespace texdc\momento\test\storage;
 
 use texdc\momento\EventId;
 use texdc\momento\test\asset\TypeRestrictedStore;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class AbstractTypeRestrictedStoreTest extends TestCase
 {
@@ -37,7 +37,7 @@ class AbstractTypeRestrictedStoreTest extends TestCase
     {
         $subject = new TypeRestrictedStore(__CLASS__);
         $subject->findAllSince(new EventId(__CLASS__));
-        $this->setExpectedException('texdc\momento\exception\EventException');
+        $this->expectException('texdc\momento\exception\EventException');
         $subject->findAllSince(new EventId('foo'));
     }
 }

@@ -2,13 +2,13 @@
 /**
  * EventIdTest.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
 namespace texdc\momento\test;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use texdc\momento\EventId;
 
 class EventIdTest extends TestCase
@@ -61,7 +61,7 @@ class EventIdTest extends TestCase
 
     public function testFromStringThrowsException()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'texdc\momento\exception\EventException',
             'Invalid id format [test_fail]'
         );

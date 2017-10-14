@@ -2,14 +2,16 @@
 /**
  * AbstractEvent.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
 namespace texdc\momento;
 
+use DateTimeInterface;
+
 use texdc\momento\exception\EventException;
-use function Verraes\ClassFunctions\underscore;
+use Verraes\ClassFunctions\ClassFunctions;
 
 /**
  * A base implementation of the {@link EventInterface}
@@ -30,14 +32,14 @@ abstract class AbstractEvent implements EventInterface
      */
     public function __construct(EventId $eventId = null)
     {
-        $this->setEventId($eventId ?: new EventId(underscore($this)));
+        $this->setEventId($eventId ?: new EventId(ClassFunctions::underscore($this)));
     }
 
     /**
      * (non-PHPdoc)
      * @see texdc\momento\EventInterface::eventId()
      */
-    public function eventId()
+    public function eventId() : EventId
     {
         return $this->eventId;
     }
@@ -46,7 +48,7 @@ abstract class AbstractEvent implements EventInterface
      * (non-PHPdoc)
      * @see texdc\momento\EventInterface::occurrenceDate()
      */
-    public function occurrenceDate()
+    public function occurrenceDate() : DateTimeInterface
     {
         return $this->eventId->occurrenceDate();
     }
@@ -55,7 +57,7 @@ abstract class AbstractEvent implements EventInterface
      * (non-PHPdoc)
      * @see texdc\momento\EventInterface::eventType()
      */
-    public function eventType()
+    public function eventType() : string
     {
         return $this->eventId->eventType();
     }
@@ -69,7 +71,7 @@ abstract class AbstractEvent implements EventInterface
     private function setEventId(EventId $eventId)
     {
         $eventType = $eventId->eventType();
-        if ($eventType != underscore($this)) {
+        if ($eventType != ClassFunctions::underscore($this)) {
             throw EventException::invalidType($eventType);
         }
         $this->eventId = $eventId;

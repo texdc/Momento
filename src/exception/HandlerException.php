@@ -2,7 +2,7 @@
 /**
  * HandlerException.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -32,7 +32,7 @@ final class HandlerException extends DomainException
      * @param Exception $anException
      * @see   texdc\momento\HandlerQueue::insert()
      */
-    public static function duplicate(callable $aHandler, Exception $anException = null)
+    public static function duplicate(callable $aHandler, Exception $anException = null) : self
     {
         $message = sprintf('Duplicate handler [%s]', get_class($aHandler));
         return new static($message, static::CODE_DUPLICATE, $anException);

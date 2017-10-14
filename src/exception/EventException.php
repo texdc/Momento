@@ -2,7 +2,7 @@
 /**
  * EventException.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -33,7 +33,7 @@ final class EventException extends DomainException
      * @param  Exception $anException a previous exception
      * @return self
      */
-    public static function invalidType($anEventType, Exception $anException = null)
+    public static function invalidType(string $anEventType, Exception $anException = null) : self
     {
         return new static("Invalid event type [$anEventType]", static::CODE_INVALID_TYPE, $anException);
     }
@@ -45,7 +45,7 @@ final class EventException extends DomainException
      * @param  Exception $anException a previous exception
      * @return self
      */
-    public static function invalidId($anEventId, Exception $anException = null)
+    public static function invalidId(string $anEventId, Exception $anException = null) : self
     {
         return new static("Invalid id format [$anEventId]", static::CODE_INVALID_ID, $anException);
     }

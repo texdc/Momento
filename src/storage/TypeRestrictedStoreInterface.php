@@ -2,7 +2,7 @@
 /**
  * TypeRestrictedStoreInterface.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -21,5 +21,5 @@ interface TypeRestrictedStoreInterface extends EventStoreInterface
      * @param  string $anEventType
      * @return bool
      */
-    public function isValidEventType($anEventType);
+    public function isValidEventType(string $anEventType) : bool;
 }

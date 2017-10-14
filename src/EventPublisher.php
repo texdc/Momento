@@ -2,7 +2,7 @@
 /**
  * EventPublisher.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -71,7 +71,7 @@ final class EventPublisher implements EventPublisherInterface
      * @param callable $aHandler     the handler to register
      * @param int      $withPriority the handler's priority
      */
-    private function register(callable $aHandler, $withPriority = 0)
+    private function register(callable $aHandler, int $withPriority = 0)
     {
         $eventTypes = ($aHandler instanceof EventHandlerInterface)
             ? $aHandler->validEventTypes()
@@ -89,7 +89,7 @@ final class EventPublisher implements EventPublisherInterface
      * @param  array  $queue       a default queue to initialize
      * @return HandlerQueue|array
      */
-    private function initQueue($anEventType = self::EVENT_TYPE_ALL, array $queue = null)
+    private function initQueue(string $anEventType = self::EVENT_TYPE_ALL, array $queue = null)
     {
         if (!isset($this->queues[$anEventType])) {
             $this->queues[$anEventType] = $queue ?: new HandlerQueue;
@@ -110,7 +110,7 @@ final class EventPublisher implements EventPublisherInterface
      * @param  string $className the handler's classname
      * @return callable
      */
-    private function buildHandlerProxy($className)
+    private function buildHandlerProxy(string $className) : callable
     {
         return function (EventInterface $anEvent) use ($className) {
             static $handler;

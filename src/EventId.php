@@ -2,7 +2,7 @@
 /**
  * EventId.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -42,7 +42,7 @@ class EventId implements JsonSerializable, Serializable
      *
      * @param string $eventType the event type
      */
-    public function __construct($eventType)
+    public function __construct(string $eventType)
     {
         $this->time = microtime(true);
         $this->hash = hash('crc32', mt_rand(0, $this->time));
@@ -56,7 +56,7 @@ class EventId implements JsonSerializable, Serializable
      * @return EventId
      * @throws InvalidArgumentException when the string format is invalid
      */
-    public static function fromString($eventId)
+    public static function fromString(string $eventId) : self
     {
         $parts = explode('_', $eventId);
         if (count($parts) != 3) {
@@ -74,7 +74,7 @@ class EventId implements JsonSerializable, Serializable
      * @param  self $anEventId
      * @return bool
      */
-    public function occurredBefore(self $anEventId)
+    public function occurredBefore(self $anEventId) : bool
     {
         return $this->time < $anEventId->time;
     }
@@ -83,7 +83,7 @@ class EventId implements JsonSerializable, Serializable
      * @param  self $anEventId
      * @return bool
      */
-    public function occurredAfter(self $anEventId)
+    public function occurredAfter(self $anEventId) : bool
     {
         return $this->time > $anEventId->time;
     }
@@ -91,7 +91,7 @@ class EventId implements JsonSerializable, Serializable
     /**
      * @return string
      */
-    public function eventType()
+    public function eventType() : string
     {
         return $this->type;
     }
@@ -99,7 +99,7 @@ class EventId implements JsonSerializable, Serializable
     /**
      * @return DateTime
      */
-    public function occurrenceDate()
+    public function occurrenceDate() : DateTime
     {
         return DateTime::createFromFormat('U.u', $this->time);
     }
@@ -107,7 +107,7 @@ class EventId implements JsonSerializable, Serializable
     /**
      * @return float
      */
-    public function timestamp()
+    public function timestamp() : float
     {
         return $this->time;
     }
@@ -115,7 +115,7 @@ class EventId implements JsonSerializable, Serializable
     /**
      * @return string
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : string
     {
         return (string) $this;
     }
@@ -123,7 +123,7 @@ class EventId implements JsonSerializable, Serializable
     /**
      * @return string
      */
-    public function serialize()
+    public function serialize() : string
     {
         return serialize($this->jsonSerialize());
     }
@@ -132,12 +132,13 @@ class EventId implements JsonSerializable, Serializable
      * @param  string $serialized
      * @return EventId
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized) : self
     {
         $id = static::fromString(unserialize($serialized));
         $this->hash = $id->hash;
         $this->time = $id->time;
         $this->type = $id->type;
+        return $this;
     }
 
     /**
@@ -145,7 +146,7 @@ class EventId implements JsonSerializable, Serializable
      *
      * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
         return sprintf("%s_%f_%s", $this->type, $this->time, $this->hash);
     }

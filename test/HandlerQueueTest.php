@@ -2,13 +2,13 @@
 /**
  * HandlerQueueTest.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
 namespace texdc\momento\test;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use texdc\momento\HandlerQueue;
 
 class HandlerQueueTest extends TestCase
@@ -39,7 +39,7 @@ class HandlerQueueTest extends TestCase
         $subject = new HandlerQueue;
         $handler = $this->getMockForAbstractClass('texdc\momento\EventHandlerInterface');
         $subject->insert($handler);
-        $this->setExpectedException('texdc\momento\exception\HandlerException');
+        $this->expectException('texdc\momento\exception\HandlerException');
         $subject->insert($handler, 2);
     }
 

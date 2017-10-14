@@ -2,13 +2,13 @@
 /**
  * MemoryStoreTest.php
  *
- * @copyright 2016 George D. Cooksey, III
+ * @copyright 2017 George D. Cooksey, III
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
 namespace texdc\momento\test\storage;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use texdc\momento\storage\MemoryStore;
 use texdc\momento\EventId;
 
@@ -30,28 +30,28 @@ class MemoryStoreTest extends TestCase
         );
     }
 
-    public function testAppendAddsEvent()
+    public function testRecordAddsEvent()
     {
         $subject = new MemoryStore(__CLASS__);
         $this->assertCount(0, $subject);
-        $subject->append($this->getEvent());
+        $subject->record($this->getEvent());
         $this->assertCount(1, $subject);
     }
 
-    public function testAppendValidatesEventType()
+    public function testRecordValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException(self::EVENT_EXCEPTION);
-        $subject->append($this->getEvent('foo'));
+        $this->expectException(self::EVENT_EXCEPTION);
+        $subject->record($this->getEvent('foo'));
     }
 
-    public function testAppendRejectsDuplicates()
+    public function testRecordRejectsDuplicates()
     {
         $subject = new MemoryStore(__CLASS__);
         $event = $this->getEvent();
-        $subject->append($event);
-        $this->setExpectedException(static::STORAGE_EXCEPTION);
-        $subject->append($event);
+        $subject->record($event);
+        $this->expectException(static::STORAGE_EXCEPTION);
+        $subject->record($event);
     }
 
     public function testFindAllSinceReturnsEventArray()
@@ -64,7 +64,7 @@ class MemoryStoreTest extends TestCase
             if ($numEvents == 2) {
                 $anEventId = $event->eventId();
             }
-            $subject->append($event);
+            $subject->record($event);
             $numEvents++;
         }
         $findAllSince = $subject->findAllSince($anEventId);
@@ -75,7 +75,7 @@ class MemoryStoreTest extends TestCase
     public function testFindAllSinceValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException(self::EVENT_EXCEPTION);
+        $this->expectException(self::EVENT_EXCEPTION);
         $subject->findAllSince(new EventId('foo'));
     }
 
@@ -92,7 +92,7 @@ class MemoryStoreTest extends TestCase
             } elseif ($numEvents == 4) {
                 $aHighEventId = $event->eventId();
             }
-            $subject->append($event);
+            $subject->record($event);
             $numEvents++;
         }
         $findAllBetween = $subject->findAllBetween($aLowEventId, $aHighEventId);
@@ -103,21 +103,21 @@ class MemoryStoreTest extends TestCase
     public function testFindAllBetweenValidatesLowEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException(self::EVENT_EXCEPTION);
+        $this->expectException(self::EVENT_EXCEPTION);
         $subject->findAllBetween(new EventId('foo'), new EventId(__CLASS__));
     }
 
     public function testFindAllBetweenValidatesHighEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException(self::EVENT_EXCEPTION);
+        $this->expectException(self::EVENT_EXCEPTION);
         $subject->findAllBetween(new EventId(__CLASS__), new EventId('foo'));
     }
 
     public function testFindByIdValidatesEventType()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException(self::EVENT_EXCEPTION);
+        $this->expectException(self::EVENT_EXCEPTION);
         $subject->findById(new EventId('foo'));
     }
 
@@ -125,14 +125,14 @@ class MemoryStoreTest extends TestCase
     {
         $subject = new MemoryStore(__CLASS__);
         $event   = $this->getEvent();
-        $subject->append($event);
+        $subject->record($event);
         $this->assertSame($event, $subject->findById($event->eventId()));
     }
 
     public function testFindByIdThrowsUnknownEventIdException()
     {
         $subject = new MemoryStore(__CLASS__);
-        $this->setExpectedException(static::STORAGE_EXCEPTION);
+        $this->expectException(static::STORAGE_EXCEPTION);
         $subject->findById(new EventId(__CLASS__));
     }
 
