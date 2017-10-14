@@ -8,7 +8,8 @@
 
 namespace texdc\momento\test;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use texdc\momento\EventId;
+use PHPUnit\Framework\TestCase;
 
 class AbstractEventTest extends TestCase
 {
@@ -29,8 +30,10 @@ class AbstractEventTest extends TestCase
 
     public function testSetEventIdThrowsException()
     {
-        $this->setExpectedException('texdc\momento\exception\EventException', 'Invalid event type [test]');
-        $eventId = $this->getMock('texdc\momento\EventId', null, array('test'));
+        $this->expectException('texdc\momento\exception\EventException', 'Invalid event type [test]');
+        $eventId = $this->getMockBuilder(EventId::class)
+                        ->setConstructorArgs(['test'])
+                        ->getMock();
         $event   = $this->getMockForAbstractClass('texdc\momento\AbstractEvent', array($eventId));
     }
 

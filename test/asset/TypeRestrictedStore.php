@@ -14,28 +14,33 @@ use texdc\momento\storage\AbstractTypeRestrictedStore;
 
 class TypeRestrictedStore extends AbstractTypeRestrictedStore
 {
-    public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId)
+    private $events = [];
+
+    public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId) : array
     {
-        // ...
+        $this->guardEventType($aLowEventId->eventType());
+        $this->guardEventType($aHighEventId->eventType());
+        return $this->events;
     }
 
-    public function findAllSince(EventId $anEventId)
+    public function findAllSince(EventId $anEventId) : array
     {
         $this->guardEventType($anEventId->eventType());
+        return $this->events;
     }
 
-    public function findById(EventId $anEventId)
+    public function findById(EventId $anEventId) : EventInterface
+    {
+        return null;
+    }
+
+    public function record(EventInterface $anEvent) : void
     {
         // ...
     }
 
-    public function append(EventInterface $anEvent)
+    public function count() : int
     {
-        // ...
-    }
-
-    public function count()
-    {
-        // ...
+        return count($this->events);
     }
 }

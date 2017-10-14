@@ -8,7 +8,7 @@
 
 namespace texdc\momento\test;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use texdc\momento\exception\EventException;
 
 class EventExceptionTest extends TestCase

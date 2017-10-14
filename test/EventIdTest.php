@@ -8,7 +8,7 @@
 
 namespace texdc\momento\test;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use texdc\momento\EventId;
 
 class EventIdTest extends TestCase
@@ -61,7 +61,7 @@ class EventIdTest extends TestCase
 
     public function testFromStringThrowsException()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'texdc\momento\exception\EventException',
             'Invalid id format [test_fail]'
         );

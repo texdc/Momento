@@ -24,7 +24,7 @@ interface EventStoreInterface extends Countable
      * @param  EventId $aHighEventId
      * @return EventInterface[]
      */
-    public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId);
+    public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId) : array;
 
     /**
      * Find all the events which occurred after a given id
@@ -32,7 +32,7 @@ interface EventStoreInterface extends Countable
      * @param  EventId $anEventId
      * @return EventInterface[]
      */
-    public function findAllSince(EventId $anEventId);
+    public function findAllSince(EventId $anEventId) : array;
 
     /**
      * Find an event by a given id
@@ -41,13 +41,13 @@ interface EventStoreInterface extends Countable
      * @return EventInterface
      * @throws texdc\momento\exception\StorageException
      */
-    public function findById(EventId $anEventId);
+    public function findById(EventId $anEventId) : EventInterface;
 
     /**
-     * Append an event
+     * Record an event
      *
      * @param  EventInterface $anEvent
      * @throws texdc\momento\exception\StorageException
      */
-    public function append(EventInterface $anEvent);
+    public function record(EventInterface $anEvent) : void;
 }

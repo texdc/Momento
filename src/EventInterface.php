@@ -8,6 +8,7 @@
 
 namespace texdc\momento;
 
+use DateTimeInterface;
 use JsonSerializable;
 use Serializable;
 
@@ -24,19 +25,19 @@ interface EventInterface extends JsonSerializable, Serializable
      *
      * @return EventId
      */
-    public function eventId();
+    public function eventId() : EventId;
 
     /**
      * Get the event's occurance date
      *
-     * @return \DateTime
+     * @return DateTimeInterface
      */
-    public function occurrenceDate();
+    public function occurrenceDate() : DateTimeInterface;
 
     /**
      * Get the event's type
      *
      * @return string
      */
-    public function eventType();
+    public function eventType() : string;
 }

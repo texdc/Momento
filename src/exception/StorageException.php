@@ -31,7 +31,7 @@ final class StorageException extends DomainException
      * @param  Exception $anException a previous exception
      * @return self
      */
-    public static function duplicateEvent($anEventId, Exception $anException = null)
+    public static function duplicateEvent(string $anEventId, Exception $anException = null) : self
     {
         return new static("Duplicate event [$anEventId]", static::CODE_DUPLICATE_EVENT, $anException);
     }
@@ -41,7 +41,7 @@ final class StorageException extends DomainException
      * @param  Exception $anException a previous exception
      * @return self
      */
-    public static function unknownEventId($anEventId, Exception $anException = null)
+    public static function unknownEventId(string $anEventId, Exception $anException = null) : self
     {
         return new static("Unrecognized event id [$anEventId]", static::CODE_UNKNOWN_EVENT_ID, $anException);
     }

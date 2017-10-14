@@ -21,5 +21,5 @@ interface TypeRestrictedStoreInterface extends EventStoreInterface
      * @param  string $anEventType
      * @return bool
      */
-    public function isValidEventType($anEventType);
+    public function isValidEventType(string $anEventType) : bool;
 }

@@ -10,7 +10,7 @@ namespace texdc\momento\test;
 
 use texdc\momento\EventPublisher;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use texdc\momento\EventInterface;
 
 class EventPublisherTest extends TestCase
@@ -50,7 +50,7 @@ class EventPublisherTest extends TestCase
     {
         $subject = new EventPublisher(['texdc\momento\test\asset\EventHandler']);
         $event   = $this->buildEvent(static::EVENT_TYPE_FOO);
-        $this->setExpectedException('texdc\momento\exception\EventException');
+        $this->expectException('texdc\momento\exception\EventException');
         $subject->publish($event);
     }
 

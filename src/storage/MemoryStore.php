@@ -31,7 +31,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
      * @see    texdc\momento\EventStoreInterface::findAllBetween()
      * @throws texdc\momento\exception\InvalidEventTypeException
      */
-    public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId)
+    public function findAllBetween(EventId $aLowEventId, EventId $aHighEventId) : array
     {
         $this->guardEventType($aLowEventId->eventType());
         $this->guardEventType($aHighEventId->eventType());
@@ -46,7 +46,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
      * @see    texdc\momento\EventStoreInterface::findAllSince()
      * @throws texdc\momento\exception\InvalidEventTypeException
      */
-    public function findAllSince(EventId $anEventId)
+    public function findAllSince(EventId $anEventId) : array
     {
         $this->guardEventType($anEventId->eventType());
         return array_filter($this->events, function(EventInterface $anEvent) use ($anEventId) {
@@ -60,7 +60,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
      * @throws texdc\momento\exception\InvalidEventTypeException
      * @throws texdc\momento\exception\UnknownEventIdException
      */
-    public function findById(EventId $anEventId)
+    public function findById(EventId $anEventId) : EventInterface
     {
         $this->guardEventType($anEventId->eventType());
         if (isset($this->events[(string) $anEventId])) {
@@ -75,7 +75,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
      * @throws texdc\momento\exception\InvalidEventTypeException
      * @throws texdc\momento\exception\AppendingPreventedException
      */
-    public function append(EventInterface $anEvent)
+    public function record(EventInterface $anEvent) : void
     {
         $this->guardEventType($anEvent->eventType());
         $eventId = (string) $anEvent->eventId();
@@ -89,7 +89,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
      * (non-PHPdoc)
      * @see Countable::count()
      */
-    public function count()
+    public function count() : int
     {
         return count($this->events);
     }

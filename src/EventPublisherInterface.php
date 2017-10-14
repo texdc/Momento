@@ -25,5 +25,5 @@ interface EventPublisherInterface
      *
      * @param EventInterface $anEvent the event to publish
      */
-    public function publish(EventInterface $anEvent);
+    public function publish(EventInterface $anEvent) : void;
 }

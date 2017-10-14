@@ -25,25 +25,25 @@ abstract class AbstractTypeRestrictedStore implements TypeRestrictedStoreInterfa
     /**
      * @param string $anEventType the valid event type
      */
-    public function __construct($anEventType)
+    public function __construct(string $anEventType)
     {
-        $this->validEventType = (string) $anEventType;
+        $this->validEventType = $anEventType;
     }
 
     /**
      * @param  string $anEventType
      * @return bool
      */
-    public function isValidEventType($anEventType)
+    public function isValidEventType(string $anEventType) : bool
     {
-        return $this->validEventType == (string) $anEventType;
+        return $this->validEventType == $anEventType;
     }
 
     /**
      * @param  string $anEventType
      * @throws InvalidEventTypeException
      */
-    protected function guardEventType($anEventType)
+    protected function guardEventType(string $anEventType) : void
     {
         if (!$this->isValidEventType($anEventType)) {
             throw EventException::invalidType($anEventType);

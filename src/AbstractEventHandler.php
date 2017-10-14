@@ -27,7 +27,7 @@ abstract class AbstractEventHandler implements EventHandlerInterface
      *
      * @return string[]
      */
-    public function validEventTypes()
+    public function validEventTypes() : array
     {
         return static::$validEventTypes;
     }
@@ -38,7 +38,7 @@ abstract class AbstractEventHandler implements EventHandlerInterface
      * @param  string $anEventType the event type to verify
      * @return bool
      */
-    public static function validateEventType($anEventType)
+    public static function validateEventType(string $anEventType) : bool
     {
         return in_array($anEventType, static::$validEventTypes);
     }
@@ -49,7 +49,7 @@ abstract class AbstractEventHandler implements EventHandlerInterface
      * @param  string $anEventType the event type to verify
      * @throws EventException - on invalid event type
      */
-    protected function guardValidEventType($anEventType)
+    protected function guardValidEventType(string $anEventType) : void
     {
         if (!static::validateEventType($anEventType)) {
             throw EventException::invalidType($anEventType);
