@@ -35,7 +35,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
     {
         $this->guardEventType($aLowEventId->eventType());
         $this->guardEventType($aHighEventId->eventType());
-        return array_filter($this->events, function(EventInterface $anEvent) use ($aLowEventId, $aHighEventId) {
+        return array_filter($this->events, function (EventInterface $anEvent) use ($aLowEventId, $aHighEventId) {
             $id = $anEvent->eventId();
             return ($aLowEventId->occurredBefore($id) && $aHighEventId->occurredAfter($id));
         });
@@ -49,7 +49,7 @@ class MemoryStore extends AbstractTypeRestrictedStore
     public function findAllSince(EventId $anEventId) : array
     {
         $this->guardEventType($anEventId->eventType());
-        return array_filter($this->events, function(EventInterface $anEvent) use ($anEventId) {
+        return array_filter($this->events, function (EventInterface $anEvent) use ($anEventId) {
             return $anEventId->occurredBefore($anEvent->eventId());
         });
     }

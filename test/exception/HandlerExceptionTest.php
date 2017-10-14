@@ -20,7 +20,8 @@ class HandlerExceptionTest extends TestCase
 
     public function testDuplicate()
     {
-        $handler = function () {};
+        $handler = function () {
+        };
         $subject = HandlerException::duplicate($handler);
         $this->assertEquals(
             sprintf('Duplicate handler [%s]', get_class($handler)),
